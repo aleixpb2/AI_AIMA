@@ -3,7 +3,7 @@ package IA.ProbIA5;
 /**
  * Created by bejar on 17/01/17.
  */
-public class ProbIA5Board {
+public class RedesBoard {
     /* Class independent from AIMA classes
        - It has to implement the state of the problem and its operators
      *
@@ -17,7 +17,7 @@ public class ProbIA5Board {
     private int N;
 
     /* Constructor */
-    public ProbIA5Board(int []init, int[] goal) {
+    public RedesBoard(int []init, int[] goal) {
 
         board = new int[init.length];
         solution = new int[init.length];
@@ -31,11 +31,7 @@ public class ProbIA5Board {
     }
 
     /* vvvvv TO COMPLETE vvvvv */
-    public void flip_it(int i){
-        // flip the coins i and i + 1
-        board[i] = 1-board[i];
-        board[(i+1)%N] = 1-board[(i+1)%N];
-    }
+
 
     /* Heuristic function */
     public double heuristic(){
