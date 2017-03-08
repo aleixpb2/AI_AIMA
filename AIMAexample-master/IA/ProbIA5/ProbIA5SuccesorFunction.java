@@ -19,16 +19,17 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
         // Add the states to retval as Succesor("flip i j, new_state)
         // new_state has to be a copy of state
 
+
+
+        int [] init_disposition = board.boardCopy();
+        int [] goal_disposition = board.getGoal();
         for (int i=0; i<board.getLength()-1; ++i){
-            IA.ProbIA5.ProbIA5Board board_current = (IA.ProbIA5.ProbIA5Board) board.boardCopy();
-            board.flip_it(i);
-            int newState[] = board.boardCopy();
-            retval.add (newState);
-            board=board_current;
+            ProbIA5Board newboard = new ProbIA5Board(init_disposition,goal_disposition);
+            newboard.flip_it(i);
+            int [] newstate = newboard.boardCopy();
+            retval.add (newstate);
         }
-
         return retval;
-
     }
 
 }

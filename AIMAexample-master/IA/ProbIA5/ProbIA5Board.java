@@ -57,7 +57,9 @@ public class ProbIA5Board {
          }
          return true;
      }
-
+    public int [] getGoal (){
+         return solution;
+    }
      /* auxiliary functions */
 
      // Some functions will be needed for creating a copy of the state
