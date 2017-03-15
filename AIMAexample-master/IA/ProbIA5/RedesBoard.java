@@ -25,6 +25,7 @@ public class RedesBoard {
     private Sensor[] sensors;
     private Centro [] centros;
     private HashMap<Integer,Pairintbool> connexions; // First: idSensor, Second: sensor or center to which is conencted (id + bool)
+    private HashMap<Pairintbool, ArrayList<Integer>> numConnected; // Key: First -> id Second -> sensor/center Value: list of sensor ids connected to the key
     private ArrayList<ArrayList<IdDistSensor> > dist_matrix;
     private static int [] solution;
     private int N;
@@ -38,6 +39,9 @@ public class RedesBoard {
             centros[i]=cd.get(i);
         }
 
+        connexions = new HashMap<Integer, Pairintbool>();
+        numConnected = new HashMap<Pairintbool, ArrayList<Integer>>();
+
         dist_matrix = new ArrayList<ArrayList<IdDistSensor>>(sensors.length);
         generarDadesAuxiliars();
         generarConexionesInicial();
@@ -48,7 +52,11 @@ public class RedesBoard {
     private void generarConexionesInicial (){
         for(int i = 0; i < sensors.length; ++i) {
             Pairintbool closer = new Pairintbool(dist_matrix.get(i).get(0).getID(),dist_matrix.get(i).get(0).isSensor()); // get the closest
-            connexions.put(i, closer);
+            try {
+                createArc(new Pairintbool(i, true), closer);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
     private void generarDadesAuxiliars(){
@@ -89,7 +97,7 @@ public class RedesBoard {
         // compute the number of coins out of place respect to solution
         double diff = 0;
         for(int i = 0; i < N; ++i){
-             if(board[i] != solution[i])
+             //if(board[i] != solution[i])
                  ++diff;
          }
         return diff;
@@ -99,7 +107,7 @@ public class RedesBoard {
      public boolean is_goal(){
          // compute if board = solution
          for(int i = 0; i < N; ++i){
-             if(board[i] != solution[i])
+             //if(board[i] != solution[i])
                  return false;
          }
          return true;
@@ -107,12 +115,6 @@ public class RedesBoard {
     public int [] getGoal (){
          return solution;
     }
-     /* auxiliary functions */
-
-     // Some functions will be needed for creating a copy of the state
-     public int[] boardCopy(){
-         return board.clone();
-     }
      
      public int getLength(){
          return N;
@@ -122,10 +124,32 @@ public class RedesBoard {
 
     // Operators
 
+    public boolean isPossibleAdd(Pairintbool p){
+        if(p.isSensor()){
+            double cap = sensors[p.getID()].getCapacidad()*2;
+            ArrayList<Integer> l = numConnected.get(p);
+            double currentCap = 0;
+            for(int i = 0; i < l.size(); ++i){
+                currentCap += sensors[i].getCapacidad();
+            }
+
+        }else{
+            //
+        }
+    }
+
     public void  createArc(Pairintbool p1, Pairintbool p2) throws Exception {
         if(!connexions.containsKey(p1.getID())){
             connexions.put(p1.getID(), p2);
-            // TODO: check
+
+            if(numConnected.containsKey(p2)) {
+                ArrayList<Integer> l = numConnected.get(p2);
+                l.add(p1.getID());
+            }else{
+                ArrayList<Integer> l = new ArrayList<Integer>();
+                l.add(p1.getID());
+            }
+
         }else {
             throw new Exception("There exists an arc from p1");
         }
@@ -134,6 +158,14 @@ public class RedesBoard {
     public void  removeArc(Pairintbool p1, Pairintbool p2) throws Exception {
         if(connexions.containsKey(p1.getID()) && connexions.get(p1.getID()).equals(p2)){
             connexions.remove(p1.getID());
+
+            ArrayList<Integer> l = numConnected.get(p2);
+            for(int i = 0; i < l.size(); ++i){
+                if(l.get(i).equals(p1.getID())){
+                    l.remove(i);
+                    break;
+                }
+            }
         }else {
             throw new Exception("There is no arc from p1 or p1 and p2 are not connected");
         }
@@ -144,10 +176,8 @@ public class RedesBoard {
             removeArc(p1, p2);
             createArc(p1, p3);
         }catch (Exception e){
-            throw e;
+            e.printStackTrace();
         }
 
     }
-
-
 }
