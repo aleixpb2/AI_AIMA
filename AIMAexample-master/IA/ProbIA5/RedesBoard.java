@@ -27,15 +27,13 @@ public class RedesBoard {
     private HashMap<Integer,Pairintbool> connexions; // First: idSensor, Second: sensor or center to which is conencted (id + bool)
     private HashMap<Pairintbool, ArrayList<Integer>> numConnected; // Key: First -> id Second -> sensor/center Value: list of sensor ids connected to the key
     private ArrayList<ArrayList<IdDistSensor> > dist_matrix;
-    private static int [] solution;
-    private int N;
 
     /* Constructor */
     public RedesBoard(int seed, int ncent, int nsens) {
         CentrosDatos cd = new CentrosDatos(ncent,seed);
         Sensores sensores = new Sensores(nsens,seed);
         for (int i= 0 ; i<cd.size(); ++i){
-            sensors[i]= new SensorM(sensores.get(i));
+            sensors[i]= new SensorM(sensores.get(i), i);
             centros[i]=cd.get(i);
         }
 
@@ -92,40 +90,23 @@ public class RedesBoard {
 
         return dist;
     }
-    /* Heuristic function */
-    public double heuristic(){
-        // compute the number of coins out of place respect to solution
-        double diff = 0;
-        for(int i = 0; i < N; ++i){
-             //if(board[i] != solution[i])
-                 ++diff;
-         }
-        return diff;
-    }
-
-     /* Goal test */
-     public boolean is_goal(){
-         // compute if board = solution
-         for(int i = 0; i < N; ++i){
-             //if(board[i] != solution[i])
-                 return false;
-         }
-         return true;
-     }
-    public int [] getGoal (){
-         return solution;
-    }
-     
-     public int getLength(){
-         return N;
-     }
-
-    /* ^^^^^ TO COMPLETE ^^^^^ */
+//    /* Heuristic function */
+    // TODO
+//    public double heuristic(){
+//        // compute the number of coins out of place respect to solution
+//        double diff = 0;
+//        for(int i = 0; i < N; ++i){
+//             //if(board[i] != solution[i])
+//                 ++diff;
+//         }
+//        return diff;
+//    }
 
     // Operators
 
-    public boolean isPossibleAdd(Pairintbool p, int id2){ // p: sensor or center to which we want to connect id2: sensor we want to connect
+    public boolean isPossibleAdd(int id2, Pairintbool p){ // id2: sensor we want to connect p: sensor or center to which we want to connect
         if(p.isSensor()){
+            if(sensors[id2].getLast().equals(sensors[p.getID()].getLast())) return false;
             double cap = sensors[p.getID()].getCapacidad()*2;
             ArrayList<Integer> l = numConnected.get(p);
             double currentCap = 0;
@@ -146,8 +127,10 @@ public class RedesBoard {
 
     public boolean createArc(Pairintbool p1, Pairintbool p2) throws Exception {
         if (!connexions.containsKey(p1.getID()) &&
-                isPossibleAdd(p1, p2.getID())) {
+                isPossibleAdd(p2.getID(), p1 )){
             connexions.put(p1.getID(), p2);
+            SensorM sensorm = sensors[p2.getID()];
+            sensors[p2.getID()].setCurrentCap(sensorm.getCurrentCap() + sensors[p1.getID()].getCurrentCap());
 
             if (numConnected.containsKey(p2)) {
                 ArrayList<Integer> l = numConnected.get(p2);
@@ -156,13 +139,16 @@ public class RedesBoard {
                 ArrayList<Integer> l = new ArrayList<Integer>();
                 l.add(p1.getID());
             }
+            sensors[p1.getID()].setLast(sensors[p2.getID()].getLast());
             return true;
-        } else return false;
+        } else return false; // p1 is already connected or the connection is impossible
     }
 
-    public void  removeArc(Pairintbool p1, Pairintbool p2) throws Exception {
+    public boolean  removeArc(Pairintbool p1, Pairintbool p2) throws Exception {
         if(connexions.containsKey(p1.getID()) && connexions.get(p1.getID()).equals(p2)){
             connexions.remove(p1.getID());
+            SensorM sensorm = sensors[p2.getID()];
+            sensors[p2.getID()].setCurrentCap(sensorm.getCurrentCap() - sensors[p1.getID()].getCurrentCap());
 
             ArrayList<Integer> l = numConnected.get(p2);
             for(int i = 0; i < l.size(); ++i){
@@ -171,8 +157,11 @@ public class RedesBoard {
                     break;
                 }
             }
+            sensors[p1.getID()].setLast(new Pairintbool(p1.getID(), true));
+            return true;
         }else {
-            throw new Exception("There is no arc from p1 or p1 and p2 are not connected");
+            // p1 has no connections or is not connected to p2
+            return false;
         }
     }
 
