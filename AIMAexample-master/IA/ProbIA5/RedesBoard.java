@@ -24,7 +24,7 @@ public class RedesBoard {
 
     private Sensor[] sensors;
     private Centro [] centros;
-    private HashMap<Integer,Pairintbool> connexions;
+    private HashMap<Integer,Pairintbool> connexions; // First: idSensor, Second: sensor or center to which is conencted (id + bool)
     private ArrayList<ArrayList<IdDistSensor> > dist_matrix;
     private static int [] solution;
     private int N;
@@ -46,7 +46,10 @@ public class RedesBoard {
     /* vvvvv TO COMPLETE vvvvv */
 
     private void generarConexionesInicial (){
-
+        for(int i = 0; i < sensors.length; ++i) {
+            Pairintbool closer = new Pairintbool(dist_matrix.get(i).get(0).getID(),dist_matrix.get(i).get(0).isSensor()); // get the closest
+            connexions.put(i, closer);
+        }
     }
     private void generarDadesAuxiliars(){
         for (int i=0;i<sensors.length; ++i){
@@ -116,5 +119,35 @@ public class RedesBoard {
      }
 
     /* ^^^^^ TO COMPLETE ^^^^^ */
+
+    // Operators
+
+    public void  createArc(Pairintbool p1, Pairintbool p2) throws Exception {
+        if(!connexions.containsKey(p1.getID())){
+            connexions.put(p1.getID(), p2);
+            // TODO: check
+        }else {
+            throw new Exception("There exists an arc from p1");
+        }
+    }
+
+    public void  removeArc(Pairintbool p1, Pairintbool p2) throws Exception {
+        if(connexions.containsKey(p1.getID()) && connexions.get(p1.getID()).equals(p2)){
+            connexions.remove(p1.getID());
+        }else {
+            throw new Exception("There is no arc from p1 or p1 and p2 are not connected");
+        }
+    }
+
+    public void  changeArc(Pairintbool p1, Pairintbool p2, Pairintbool p3) throws Exception {
+        try{
+            removeArc(p1, p2);
+            createArc(p1, p3);
+        }catch (Exception e){
+            throw e;
+        }
+
+    }
+
 
 }

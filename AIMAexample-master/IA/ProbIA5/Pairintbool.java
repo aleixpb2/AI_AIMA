@@ -7,6 +7,11 @@ public class Pairintbool {
     private int ID;
     private boolean isSensor;
 
+    public Pairintbool(int ID, boolean isSensor) {
+        this.isSensor = isSensor;
+        this.ID = ID;
+    }
+
     public boolean isSensor() {
         return isSensor;
     }
