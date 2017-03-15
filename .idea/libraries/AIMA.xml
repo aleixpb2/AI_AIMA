@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="AIMA">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../AIMA_bin/AIMA.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../RedSensores/RedSensores.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
