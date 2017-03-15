@@ -19,6 +19,11 @@ public class SensorM extends Sensor {
 
     public SensorM(int capacidad, int cx, int cy) {
         super(capacidad, cx, cy);
-        currentCap = 0;
+        currentCap = capacidad;
+    }
+
+    public SensorM(Sensor s) {
+        super((int)s.getCapacidad(), s.getCoordX(), s.getCoordY());
+        this.currentCap = s.getCapacidad();
     }
 }

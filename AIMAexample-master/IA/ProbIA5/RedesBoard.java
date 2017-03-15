@@ -22,7 +22,7 @@ public class RedesBoard {
         vector with the parity of the coins (we can assume 0 = heads, 1 = tails
      */
 
-    private Sensor[] sensors;
+    private SensorM[] sensors;
     private Centro [] centros;
     private HashMap<Integer,Pairintbool> connexions; // First: idSensor, Second: sensor or center to which is conencted (id + bool)
     private HashMap<Pairintbool, ArrayList<Integer>> numConnected; // Key: First -> id Second -> sensor/center Value: list of sensor ids connected to the key
@@ -35,7 +35,7 @@ public class RedesBoard {
         CentrosDatos cd = new CentrosDatos(ncent,seed);
         Sensores sensores = new Sensores(nsens,seed);
         for (int i= 0 ; i<cd.size(); ++i){
-            sensors[i]=sensores.get(i);
+            sensors[i]= new SensorM(sensores.get(i));
             centros[i]=cd.get(i);
         }
 
@@ -124,35 +124,40 @@ public class RedesBoard {
 
     // Operators
 
-    public boolean isPossibleAdd(Pairintbool p){
+    public boolean isPossibleAdd(Pairintbool p, int id2){ // p: sensor or center to which we want to connect id2: sensor we want to connect
         if(p.isSensor()){
             double cap = sensors[p.getID()].getCapacidad()*2;
             ArrayList<Integer> l = numConnected.get(p);
             double currentCap = 0;
             for(int i = 0; i < l.size(); ++i){
-                currentCap += sensors[i].getCapacidad();
+                currentCap += sensors[i].getCurrentCap();
             }
-
+            return currentCap + sensors[id2].getCurrentCap() < cap && l.size() < 3;
         }else{
-            //
+            double cap = 150;
+            ArrayList<Integer> l = numConnected.get(p);
+            double currentCap = 0;
+            for(int i = 0; i < l.size(); ++i){
+                currentCap += sensors[i].getCurrentCap();
+            }
+            return currentCap + sensors[id2].getCurrentCap() < cap && l.size() < 25;
         }
     }
 
-    public void  createArc(Pairintbool p1, Pairintbool p2) throws Exception {
-        if(!connexions.containsKey(p1.getID())){
+    public boolean createArc(Pairintbool p1, Pairintbool p2) throws Exception {
+        if (!connexions.containsKey(p1.getID()) &&
+                isPossibleAdd(p1, p2.getID())) {
             connexions.put(p1.getID(), p2);
 
-            if(numConnected.containsKey(p2)) {
+            if (numConnected.containsKey(p2)) {
                 ArrayList<Integer> l = numConnected.get(p2);
                 l.add(p1.getID());
-            }else{
+            } else {
                 ArrayList<Integer> l = new ArrayList<Integer>();
                 l.add(p1.getID());
             }
-
-        }else {
-            throw new Exception("There exists an arc from p1");
-        }
+            return true;
+        } else return false;
     }
 
     public void  removeArc(Pairintbool p1, Pairintbool p2) throws Exception {
