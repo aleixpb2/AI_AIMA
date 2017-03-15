@@ -3,11 +3,11 @@ package IA.ProbIA5;
 /**
  * Created by laiafreixas on 8/03/17.
  */
-public class PairID_Dist {
+public class IdDistSensor {
     private int ID;
     private double dist;
 
-    public PairID_Dist(int ID, double dist, boolean isSensor) {
+    public IdDistSensor(int ID, double dist, boolean isSensor) {
         this.ID = ID;
         this.dist = dist;
         this.isSensor = isSensor;

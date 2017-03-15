@@ -4,8 +4,6 @@ import IA.Red.Centro;
 import IA.Red.CentrosDatos;
 import IA.Red.Sensor;
 import IA.Red.Sensores;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import sun.misc.Sort;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +25,7 @@ public class RedesBoard {
     private Sensor[] sensors;
     private Centro [] centros;
     private HashMap<Integer,Pairintbool> connexions;
-    private ArrayList<ArrayList<PairID_Dist> > dist_matrix;
+    private ArrayList<ArrayList<IdDistSensor> > dist_matrix;
     private static int [] solution;
     private int N;
 
@@ -40,7 +38,7 @@ public class RedesBoard {
             centros[i]=cd.get(i);
         }
 
-        dist_matrix = new ArrayList<ArrayList<PairID_Dist>>(sensors.length);
+        dist_matrix = new ArrayList<ArrayList<IdDistSensor>>(sensors.length);
         generarDadesAuxiliars();
         generarConexionesInicial();
     }
@@ -53,23 +51,23 @@ public class RedesBoard {
     private void generarDadesAuxiliars(){
         for (int i=0;i<sensors.length; ++i){
 
-            dist_matrix.set(i,new ArrayList<PairID_Dist>());
-            ArrayList<PairID_Dist> vecactual = dist_matrix.get(i);
+            dist_matrix.set(i,new ArrayList<IdDistSensor>());
+            ArrayList<IdDistSensor> vecactual = dist_matrix.get(i);
             for (int j=0; j<sensors.length; ++j){
                 double dist = getDist(sensors[i].getCoordX(),sensors[j].getCoordX(),sensors[i].getCoordY(),sensors[j].getCoordY());
 
-                vecactual.set(j, new PairID_Dist(j,dist,true));
+                vecactual.set(j, new IdDistSensor(j,dist,true));
 
             }
             for (int k =0 ;k<centros.length; k++){
                 double dist = getDist(sensors[i].getCoordX(),centros[k].getCoordX(),sensors[i].getCoordY(),centros[k].getCoordY());
-                vecactual.set(k+sensors.length, new PairID_Dist(k,dist,false));
+                vecactual.set(k+sensors.length, new IdDistSensor(k,dist,false));
 
             }
 
-            Collections.sort(dist_matrix.get(i), new Comparator<PairID_Dist>() {
+            Collections.sort(dist_matrix.get(i), new Comparator<IdDistSensor>() {
                 @Override
-                public int compare (PairID_Dist o1 ,PairID_Dist o2){
+                public int compare (IdDistSensor o1 , IdDistSensor o2){
                     if (o2.getDist()>o1.getDist()) return -1;
                     else if (o2.getDist()==o1.getDist()) return 0;
                     else return 1;
