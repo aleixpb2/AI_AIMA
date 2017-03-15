@@ -107,13 +107,9 @@ public class RedesBoard {
     public boolean isPossibleAdd(int id2, Pairintbool p){ // id2: sensor we want to connect p: sensor or center to which we want to connect
         if(p.isSensor()){
             if(sensors[id2].getLast().equals(sensors[p.getID()].getLast())) return false;
-            double cap = sensors[p.getID()].getCapacidad()*2;
             ArrayList<Integer> l = numConnected.get(p);
-            double currentCap = 0;
-            for(int i = 0; i < l.size(); ++i){
-                currentCap += sensors[i].getCurrentCap();
-            }
-            return currentCap + sensors[id2].getCurrentCap() < cap && l.size() < 3;
+
+            return checkCapacityRecursive(p, sensors[id2].getCurrentCap()) && l.size() < 3;
         }else{
             double cap = 150;
             ArrayList<Integer> l = numConnected.get(p);
@@ -129,8 +125,8 @@ public class RedesBoard {
         if (!connexions.containsKey(p1.getID()) &&
                 isPossibleAdd(p2.getID(), p1 )){
             connexions.put(p1.getID(), p2);
-            SensorM sensorm = sensors[p2.getID()];
-            sensors[p2.getID()].setCurrentCap(sensorm.getCurrentCap() + sensors[p1.getID()].getCurrentCap());
+            SensorM sensorm = sensors[p1.getID()];
+            capacityRecursive(p2, sensorm.getCurrentCap());
 
             if (numConnected.containsKey(p2)) {
                 ArrayList<Integer> l = numConnected.get(p2);
@@ -147,8 +143,8 @@ public class RedesBoard {
     public boolean  removeArc(Pairintbool p1, Pairintbool p2) throws Exception {
         if(connexions.containsKey(p1.getID()) && connexions.get(p1.getID()).equals(p2)){
             connexions.remove(p1.getID());
-            SensorM sensorm = sensors[p2.getID()];
-            sensors[p2.getID()].setCurrentCap(sensorm.getCurrentCap() - sensors[p1.getID()].getCurrentCap());
+            SensorM sensorm = sensors[p1.getID()];
+            capacityRecursive(p2, -sensorm.getCurrentCap());
 
             ArrayList<Integer> l = numConnected.get(p2);
             for(int i = 0; i < l.size(); ++i){
@@ -165,7 +161,7 @@ public class RedesBoard {
         }
     }
 
-    public void  changeArc(Pairintbool p1, Pairintbool p2, Pairintbool p3) throws Exception {
+    public void changeArc(Pairintbool p1, Pairintbool p2, Pairintbool p3) throws Exception {
         try{
             removeArc(p1, p2);
             createArc(p1, p3);
@@ -173,5 +169,21 @@ public class RedesBoard {
             e.printStackTrace();
         }
 
+    }
+
+    public void capacityRecursive(Pairintbool p, double deltaCapacity){
+        if(connexions.containsKey(p.getID())) { // is not a leaf
+            sensors[p.getID()].setCurrentCap(deltaCapacity + sensors[p.getID()].getCurrentCap());
+            capacityRecursive(connexions.get(p.getID()), deltaCapacity);
+        }
+    }
+
+    public boolean checkCapacityRecursive(Pairintbool p, double capToAdd){
+        if(sensors[p.getID()].getCurrentCap() + capToAdd > sensors[p.getID()].getCapacidad()*2) return false;
+        if(connexions.containsKey(p.getID())) { // is not a leaf
+            return checkCapacityRecursive(connexions.get(p.getID()), capToAdd);
+        }else{
+            return true;
+        }
     }
 }
