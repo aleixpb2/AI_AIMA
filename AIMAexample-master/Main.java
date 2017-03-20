@@ -19,10 +19,11 @@ public class Main {
          *  For a problem to be solvable:
          *    count(0,prob) % 2 == count(0,sol) %2
          */
-        int [] prob = new int []{1 ,0, 1, 1, 0};
-        int [] sol = new int[]{1, 1, 0, 1, 0};
+        int seed = 30;
+        int numcentros = 4;
+        int numsensors = 100;
 
-        RedesBoard board = new RedesBoard(prob, sol );
+        RedesBoard board = new RedesBoard(seed,numcentros,numsensors );
 
         // Create the Problem object
         Problem p = new  Problem(board,

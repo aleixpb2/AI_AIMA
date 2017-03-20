@@ -8,9 +8,15 @@ import java.util.List;
 /**
  * Created by bejar on 17/01/17.
  */
-//public class RedesSuccesorFunction implements SuccessorFunction{
+public class RedesSuccesorFunction implements SuccessorFunction{
+    @Override
+    public List getSuccessors(Object state) {
 
- //   public List getSuccessors(Object state){
+
+        return null;
+    }
+
+    //   public List getSuccessors(Object state){
 //        ArrayList retval = new ArrayList();
 //        RedesBoard board = (RedesBoard) state;
 
@@ -32,4 +38,4 @@ import java.util.List;
 //        return retval;
 //    }
 
-//}
+}

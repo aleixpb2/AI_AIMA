@@ -8,7 +8,7 @@ import aima.search.framework.GoalTest;
 public class RedesGoalTest implements GoalTest {
 
     public boolean isGoalState(Object state){
-
-        return((RedesBoard) state).is_goal();
+        return true;
+        //return((RedesBoard) state).is_goal();
     }
 }

@@ -92,7 +92,8 @@ public class RedesBoard {
     }
 //    /* Heuristic function */
     // TODO
-//    public double heuristic(){
+    //public double heuristic(){
+
 //        // compute the number of coins out of place respect to solution
 //        double diff = 0;
 //        for(int i = 0; i < N; ++i){
@@ -100,7 +101,8 @@ public class RedesBoard {
 //                 ++diff;
 //         }
 //        return diff;
-//    }
+
+    //}
 
     // Operators
 
