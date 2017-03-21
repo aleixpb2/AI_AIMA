@@ -11,7 +11,13 @@ import java.util.List;
 public class RedesSuccesorFunction implements SuccessorFunction{
     @Override
     public List getSuccessors(Object state) {
-
+        RedesBoard rb = (RedesBoard) state;
+        List l = new ArrayList();
+        for (Integer i : rb.getConnexions().keySet()){
+            for (Integer j: rb.getConnexions().keySet()){
+                //change arc i,j ?? proposta
+            }
+        }
 
         return null;
     }

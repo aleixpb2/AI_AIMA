@@ -4,11 +4,9 @@ import IA.Red.Centro;
 import IA.Red.CentrosDatos;
 import IA.Red.Sensor;
 import IA.Red.Sensores;
+import aima.util.Pair;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Created by bejar on 17/01/17.
@@ -24,10 +22,15 @@ public class RedesBoard {
 
     private SensorM[] sensors;
     private Centro [] centros;
-    private HashMap<Integer,Pairintbool> connexions; // First: idSensor, Second: sensor or center to which is conencted (id + bool)
-    private HashMap<Pairintbool, ArrayList<Integer>> numConnected; // Key: First -> id Second -> sensor/center Value: list of sensor ids connected to the key
-    private ArrayList<ArrayList<IdDistSensor> > dist_matrix;
 
+    public HashMap<Integer, Pairintbool> getConnexions() {
+        return connexions;
+    }
+
+    private HashMap<Integer,Pairintbool> connexions; // First: idSensor, Second: sensor or center to which is conencted (id + bool)
+    private HashMap<Pairintbool, ArrayList<Integer>> numConnected; // Key: First -> id Second -> isSensor/center Value: list of sensor ids connected to the key
+    private ArrayList<ArrayList<IdDistSensor> > dist_matrix;
+    //TODO GENERATE GETTERS AND SETTERS FOR OTHER FUNCTIONS : WHICH DO WE NEED?
     /* Constructor */
     public RedesBoard(int seed, int ncent, int nsens) {
         CentrosDatos cd = new CentrosDatos(ncent,seed);
@@ -90,19 +93,65 @@ public class RedesBoard {
 
         return dist;
     }
+
+    private double computeTotalDistanceCost (){
+        double dist = 0;
+        for (Pairintbool i : numConnected.keySet()){
+            if (i.isSensor()){
+                int x1 = sensors[i.getID()].getCoordX();
+                int y1 = sensors[i.getID()].getCoordY();
+                ArrayList<Integer>sensorlist = numConnected.get(i);
+                for (int j=0; j<sensorlist.size(); ++j){
+                    int x2 = sensors[sensorlist.get(j)].getCoordX();
+                    int y2 = sensors[sensorlist.get(j)].getCoordY();
+                    dist += getDist(x1,x2,y1,y2);
+                }
+            }
+            else {
+                int x1 = centros[i.getID()].getCoordX();
+                int y1 = centros[i.getID()].getCoordY();
+                ArrayList<Integer>sensorlist = numConnected.get(i);
+                for (int j=0; j<sensorlist.size(); ++j){
+                    int x2 = sensors[sensorlist.get(j)].getCoordX();
+                    int y2 = sensors[sensorlist.get(j)].getCoordY();
+                    dist += getDist(x1,x2,y1,y2);
+                }
+            }
+
+        }
+        return dist;
+    }
+
+    /**
+     * suponiendo que currentCap de cada sensor es la cantidad de informacion acumulada hasta entonces
+     * @return transm : la suma de la cantidad de informacion acumulada que llegan a todos los centros
+     */
+    private double computeTotalTransmitted (){
+        double transm = 0;
+        for (Pairintbool i: numConnected.keySet()){
+            if (!i.isSensor()){ //si es centro
+                ArrayList<Integer>sensorlist = numConnected.get(i);
+                for (int j=0; j<sensorlist.size(); ++j){
+                    transm+= sensors[sensorlist.get(j)].getCurrentCap();
+                }
+
+
+            }
+
+        }
+        return transm;
+    }
 //    /* Heuristic function */
     // TODO
-    //public double heuristic(){
+    public double heuristic(){
 
-//        // compute the number of coins out of place respect to solution
-//        double diff = 0;
-//        for(int i = 0; i < N; ++i){
-//             //if(board[i] != solution[i])
-//                 ++diff;
-//         }
-//        return diff;
+    //1. todos los sensores conectados (pero no te perque transmitir)
+    //maximizar total informacion que llega a los centros de datos
+    //minimizar coste total transmisio (distancia)
 
-    //}
+        //de moment nomes he posat minimizar cost distancia
+        return computeTotalDistanceCost();
+    }
 
     // Operators
 
@@ -119,11 +168,13 @@ public class RedesBoard {
             for(int i = 0; i < l.size(); ++i){
                 currentCap += sensors[i].getCurrentCap();
             }
+
+            //TODO: CANVIAR AIXO, si hi ha mes de 150 o si hi ha mes de la informacio possible a transmetre si que es pot crear la conexio pero NO ENVIA INFORMACIO!
             return currentCap + sensors[id2].getCurrentCap() < cap && l.size() < 25;
         }
     }
 
-    public boolean createArc(Pairintbool p1, Pairintbool p2) throws Exception {
+    public boolean createArc(Pairintbool p1, Pairintbool p2)  {
         if (!connexions.containsKey(p1.getID()) &&
                 isPossibleAdd(p2.getID(), p1 )){
             connexions.put(p1.getID(), p2);
@@ -142,7 +193,7 @@ public class RedesBoard {
         } else return false; // p1 is already connected or the connection is impossible
     }
 
-    public boolean  removeArc(Pairintbool p1, Pairintbool p2) throws Exception {
+    public boolean  removeArc(Pairintbool p1, Pairintbool p2)  {
         if(connexions.containsKey(p1.getID()) && connexions.get(p1.getID()).equals(p2)){
             connexions.remove(p1.getID());
             SensorM sensorm = sensors[p1.getID()];
@@ -163,13 +214,9 @@ public class RedesBoard {
         }
     }
 
-    public void changeArc(Pairintbool p1, Pairintbool p2, Pairintbool p3) throws Exception {
-        try{
-            removeArc(p1, p2);
-            createArc(p1, p3);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+    public boolean changeArc(Pairintbool p1, Pairintbool p2, Pairintbool p3)  {
+            if (removeArc(p1, p2)) return createArc(p1, p3);
+            else return false;
 
     }
 
@@ -181,6 +228,7 @@ public class RedesBoard {
     }
 
     public boolean checkCapacityRecursive(Pairintbool p, double capToAdd){
+        //TODO: AQUI EL LIMIT NO ES GETCAPACIDAD*3 ?
         if(sensors[p.getID()].getCurrentCap() + capToAdd > sensors[p.getID()].getCapacidad()*2) return false;
         if(connexions.containsKey(p.getID())) { // is not a leaf
             return checkCapacityRecursive(connexions.get(p.getID()), capToAdd);
