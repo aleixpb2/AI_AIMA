@@ -12,14 +12,11 @@ public class RedesBoard {
      */
 
     public static String SWAP = "Swap";
-
     private SensorM[] sensors;
     private static Centro [] centros;
+    private HashMap<Integer,Pairintbool>  connexions; // First: idSensor, Second: sensor or center to which is conencted (id + bool)
+    private HashMap<Pairintbool, ArrayList<Integer>>  incidentConnected; // Key: First -> id Second -> isSensor/center Value: list of sensor ids connected to the key
 
-
-
-    private HashMap<Integer,Pairintbool> connexions; // First: idSensor, Second: sensor or center to which is conencted (id + bool)
-    private HashMap<Pairintbool, ArrayList<Integer>> incidentConnected; // Key: First -> id Second -> isSensor/center Value: list of sensor ids connected to the key
     private static ArrayList<ArrayList<IdDistSensor> > dist_matrix = null;
     //TODO GENERATE GETTERS AND SETTERS FOR OTHER FUNCTIONS : WHICH DO WE NEED?
     /* Constructor */
@@ -40,9 +37,21 @@ public class RedesBoard {
         generarConexionesInicial();
     }
 
+    public RedesBoard (RedesBoard b){
+        connexions = (HashMap)b.getConnexions().clone();
+        incidentConnected = (HashMap) b.getIncidentConnected().clone();
+        sensors = b.getSensors().clone();
+        centros = b.getCentros();
+        dist_matrix = b.getDist_matrix();
+    }
+
     //GETTERS AND SETTERS
     public HashMap<Integer, Pairintbool> getConnexions() {
         return connexions;
+    }
+
+    public HashMap<Pairintbool, ArrayList<Integer>> getIncidentConnected() {
+        return incidentConnected;
     }
     public int nSensors (){
         return sensors.length;
@@ -50,6 +59,19 @@ public class RedesBoard {
     public int nCentros (){
         return centros.length;
     }
+
+    public SensorM[] getSensors() {
+        return sensors;
+    }
+    public Centro[] getCentros(){
+        return centros;
+    }
+
+
+    public static ArrayList<ArrayList<IdDistSensor>> getDist_matrix() {
+        return dist_matrix;
+    }
+
 
     /* vvvvv TO COMPLETE vvvvv */
 
@@ -181,6 +203,14 @@ public class RedesBoard {
 
     }
 
+    public double heuristic (){
+
+        //total transmitted =
+
+        return computeTotalDistanceCost();
+        //return computeTotalTransmitted();
+    }
+
     public boolean createArc(Pairintbool p1, Pairintbool p2)  {
         if (!connexions.containsKey(p1.getID()) &&
                 isPossibleAdd(p2.getID(), p1 )){
@@ -251,6 +281,7 @@ public class RedesBoard {
     // TODO:
     public String toString() {
         String retVal = "|";
+        //
         //for (int i = 0; i < ncities; i++) {
         //    retVal = retVal + path[i] + "|";
         //}
