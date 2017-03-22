@@ -4,6 +4,7 @@ import aima.search.framework.Successor;
 import aima.search.framework.SuccessorFunction;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -13,24 +14,26 @@ public class RedesSuccesorFunctionSA implements SuccessorFunction{
         RedesBoard rb = (RedesBoard) state;
         ArrayList l = new ArrayList();
         RedesHeuristicFunction redesHF  = new RedesHeuristicFunction();
+        HashMap<Integer,Pairintbool> connexions = rb.getConnexions();
+
         Random myRandom=new Random();
         int i,j;
-        // TODO: com l'anterior pero generar nomes un succesor amb operador aleatori i params. aleatoris
-        //i=myRandom.nextInt(rb.getNCities());
+        i=myRandom.nextInt(rb.nSensors());
+        Pairintbool p1 = new Pairintbool(i, true);
+        Pairintbool p2 = connexions.get(i);
+        RedesBoard newBoard = rb.copy();
+        boolean sensor = true;
+        do{
+            j=myRandom.nextInt(rb.nSensors() + rb.nCentros());
+            if(j >= rb.nSensors()){
+                j -= rb.nSensors();
+                sensor = false;
+            }
+        } while (!newBoard.changeArc(p1, p2, new Pairintbool(j, sensor)));
 
-        //do{
-            //j=myRandom.nextInt(rb.getNCities());
-        //} while (i==j);
-
-        /*
-        ProbTSPBoard newBoard = new ProbTSPBoard(board.getNCities(), board.getPath(), board.getDists());
-
-        newBoard.swapCities(i, j);
-
-        double   v = TSPHF.getHeuristicValue(newBoard);
-        String S = ProbTSPBoard.INTERCAMBIO + " " + i + " " + j + " Coste(" + v + ") ---> " + newBoard.toString();
-
-        retVal.add(new Successor(S, newBoard));*/
+        double v = redesHF.getHeuristicValue(newBoard);
+        String S = RedesBoard.SWAP + " " + i + " " + j + " sensor. Cost(" + v + ") ---> " + newBoard.toString();
+        l.add(new Successor(S, newBoard));
         return l;
     }
 }
