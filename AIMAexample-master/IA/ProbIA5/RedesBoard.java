@@ -8,17 +8,12 @@ import aima.util.Pair;
 
 import java.util.*;
 
-/**
- * Created by bejar on 17/01/17.
- */
 public class RedesBoard {
     /* Class independent from AIMA classes
        - It has to implement the state of the problem and its operators
-     *
-
-    /* State data structure
-        vector with the parity of the coins (we can assume 0 = heads, 1 = tails
      */
+
+    public static String SWAP = "Swap";
 
     private SensorM[] sensors;
     private Centro [] centros;
@@ -94,7 +89,7 @@ public class RedesBoard {
         return dist;
     }
 
-    private double computeTotalDistanceCost (){
+    public double computeTotalDistanceCost (){
         double dist = 0;
         for (Pairintbool i : numConnected.keySet()){
             if (i.isSensor()){
@@ -140,17 +135,6 @@ public class RedesBoard {
 
         }
         return transm;
-    }
-//    /* Heuristic function */
-    // TODO
-    public double heuristic(){
-
-    //1. todos los sensores conectados (pero no te perque transmitir)
-    //maximizar total informacion que llega a los centros de datos
-    //minimizar coste total transmisio (distancia)
-
-        //de moment nomes he posat minimizar cost distancia
-        return computeTotalDistanceCost();
     }
 
     // Operators
@@ -235,5 +219,14 @@ public class RedesBoard {
         }else{
             return true;
         }
+    }
+
+    // TODO:
+    public String toString() {
+        String retVal = "|";
+        //for (int i = 0; i < ncities; i++) {
+        //    retVal = retVal + path[i] + "|";
+        //}
+        return retVal;
     }
 }
