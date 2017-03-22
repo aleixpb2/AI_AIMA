@@ -37,12 +37,12 @@ public class RedesBoard {
         generarConexionesInicial();
     }
 
-    public RedesBoard (RedesBoard b){
-        connexions = (HashMap)b.getConnexions().clone();
-        incidentConnected = (HashMap) b.getIncidentConnected().clone();
-        sensors = b.getSensors().clone();
-        centros = b.getCentros();
-        dist_matrix = b.getDist_matrix();
+    private RedesBoard (HashMap<Integer,Pairintbool>  connex,  HashMap<Pairintbool, ArrayList<Integer>>incidentConnec,SensorM[] sensorlist,Centro[] centroslist,ArrayList<ArrayList<IdDistSensor> > dist_matr){
+        connexions = connex;
+        incidentConnected = incidentConnec;
+        sensors = sensorlist;
+        centros = centroslist;
+        dist_matrix = dist_matr;
     }
 
     //GETTERS AND SETTERS
@@ -72,6 +72,11 @@ public class RedesBoard {
         return dist_matrix;
     }
 
+
+    public RedesBoard copy (){
+        RedesBoard newBoard = new RedesBoard((HashMap<Integer,Pairintbool>)this.getConnexions().clone(),(HashMap<Pairintbool, ArrayList<Integer>> )this.getIncidentConnected().clone(),this.getSensors().clone(),this.getCentros(),this.getDist_matrix());
+        return newBoard;
+    }
 
     /* vvvvv TO COMPLETE vvvvv */
 
@@ -203,10 +208,13 @@ public class RedesBoard {
 
     }
 
+
+
     public double heuristic (){
 
-        //total transmitted =
 
+        //RANGE total transmitted € (0, 5*numSensors)
+        //RANGE total distance € (1,
         return computeTotalDistanceCost();
         //return computeTotalTransmitted();
     }
