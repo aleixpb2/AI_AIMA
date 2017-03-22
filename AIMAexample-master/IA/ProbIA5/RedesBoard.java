@@ -156,7 +156,7 @@ public class RedesBoard {
      * suponiendo que currentCap de cada sensor es la cantidad de informacion acumulada hasta entonces
      * @return transm : la suma de la cantidad de informacion acumulada que llegan a todos los centros
      */
-    private double computeTotalTransmitted (){
+    public double computeTotalTransmitted (){
         double transm = 0;
         for (Pairintbool i: incidentConnected.keySet()){
             if (!i.isSensor()){ //si es centro
@@ -210,14 +210,7 @@ public class RedesBoard {
 
 
 
-    public double heuristic (){
 
-
-        //RANGE total transmitted € (0, 5*numSensors)
-        //RANGE total distance € (1,
-        return computeTotalDistanceCost();
-        //return computeTotalTransmitted();
-    }
 
     public boolean createArc(Pairintbool p1, Pairintbool p2)  {
         if (!connexions.containsKey(p1.getID()) &&

@@ -11,6 +11,15 @@ public class RedesHeuristicFunction implements HeuristicFunction {
     //de moment nomes he posat minimizar cost distancia
     public double getHeuristicValue(Object state){
         RedesBoard board=(RedesBoard)state;
-        return board.computeTotalDistanceCost();
+
+
+        //RANGE total transmitted € (0, 5*numSensors)
+        //RANGE total distance € (1, 25*diagonal * numCentros)
+        int factor = 1;
+        return board.computeTotalDistanceCost() - factor * board.computeTotalTransmitted();
+        //return computeTotalDistanceCost(); // minimizar
+        //return computeTotalTransmitted(); //maximizar
+
+
     }
 }
