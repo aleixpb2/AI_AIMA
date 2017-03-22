@@ -17,23 +17,31 @@ public class RedesBoard {
     private HashMap<Integer,Pairintbool>  connexions; // First: idSensor, Second: sensor or center to which is conencted (id + bool)
     private HashMap<Pairintbool, ArrayList<Integer>>  incidentConnected; // Key: First -> id Second -> isSensor/center Value: list of sensor ids connected to the key
 
-    private static ArrayList<ArrayList<IdDistSensor> > dist_matrix = null;
+    private ArrayList<ArrayList<IdDistSensor> > dist_matrix = null;
     //TODO GENERATE GETTERS AND SETTERS FOR OTHER FUNCTIONS : WHICH DO WE NEED?
     /* Constructor */
 
     public RedesBoard(int seed, int ncent, int nsens) {
         CentrosDatos cd = new CentrosDatos(ncent,seed);
         Sensores sensores = new Sensores(nsens,seed);
+        centros = new Centro[cd.size()];
+        sensors = new SensorM[sensores.size()];
         for (int i= 0 ; i<cd.size(); ++i){
-            sensors[i]= new SensorM(sensores.get(i), i);
             centros[i]=cd.get(i);
+        }
+        for (int i=0; i<sensores.size(); ++i){
+            sensors[i]= new SensorM(sensores.get(i), i);
         }
 
         connexions = new HashMap<Integer, Pairintbool>();
         incidentConnected = new HashMap<Pairintbool, ArrayList<Integer>>();
 
-        if (dist_matrix==null) dist_matrix = new ArrayList<ArrayList<IdDistSensor>>(sensors.length);
-        generarDadesAuxiliars();
+        if (dist_matrix==null) {
+            System.out.println("Creating new distmatrixx");
+            dist_matrix = new ArrayList<ArrayList<IdDistSensor>>();
+            generarDistMatrix();
+
+        }
         generarConexionesInicial();
     }
 
@@ -68,7 +76,7 @@ public class RedesBoard {
     }
 
 
-    public static ArrayList<ArrayList<IdDistSensor>> getDist_matrix() {
+    public ArrayList<ArrayList<IdDistSensor>> getDist_matrix() {
         return dist_matrix;
     }
 
@@ -90,20 +98,21 @@ public class RedesBoard {
             }
         }
     }
-    private void generarDadesAuxiliars(){
+    private void generarDistMatrix(){
         for (int i=0;i<sensors.length; ++i){
 
-            dist_matrix.set(i,new ArrayList<IdDistSensor>());
+
+            dist_matrix.add(i,new ArrayList<IdDistSensor>());
             ArrayList<IdDistSensor> vecactual = dist_matrix.get(i);
             for (int j=0; j<sensors.length; ++j){
                 double dist = getDist(sensors[i].getCoordX(),sensors[j].getCoordX(),sensors[i].getCoordY(),sensors[j].getCoordY());
 
-                vecactual.set(j, new IdDistSensor(j,dist,true));
+                vecactual.add(j, new IdDistSensor(j,dist,true));
 
             }
             for (int k =0 ;k<centros.length; k++){
                 double dist = getDist(sensors[i].getCoordX(),centros[k].getCoordX(),sensors[i].getCoordY(),centros[k].getCoordY());
-                vecactual.set(k+sensors.length, new IdDistSensor(k,dist,false));
+                vecactual.add(k+sensors.length, new IdDistSensor(k,dist,false));
 
             }
 
