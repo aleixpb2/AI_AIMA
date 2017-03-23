@@ -26,7 +26,7 @@ public class RedesSuccesorFunction implements SuccessorFunction{
                     System.out.println ("           It has changed to this:");
                     System.out.println("            "+newBoard.getIncidentConnected());
                     double v = redesHF.getHeuristicValue(newBoard);
-                    String S = RedesBoard.SWAP + " " + i + " " + j + " sensor. Cost(" + v + ") ---> " + newBoard.toString();
+                    String S = RedesBoard.SWAP + " " + i + " " + j + " sensor. Cost(" + v + ") ---> \n" + newBoard.toString();
                     l.add(new Successor(S, newBoard));
                 }
             }
@@ -34,7 +34,7 @@ public class RedesSuccesorFunction implements SuccessorFunction{
                 RedesBoard newBoard = rb.copy();
                 if(newBoard.changeArc(p1, p2, new Pairintbool(j, false))) {
                     double v = redesHF.getHeuristicValue(newBoard);
-                    String S = RedesBoard.SWAP + " " + i + " " + j + " centro. Cost(" + v + ") ---> " + newBoard.toString();
+                    String S = RedesBoard.SWAP + " " + i + " " + j + " centro. Cost(" + v + ") ---> \n"+ newBoard.toString();
                     l.add(new Successor(S, newBoard));
                 }
             }
