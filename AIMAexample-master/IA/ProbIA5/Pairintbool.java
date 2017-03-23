@@ -35,7 +35,7 @@ public class Pairintbool {
 
     @Override
     public int hashCode() {
-        return String.valueOf(ID).hashCode()+String.valueOf(isSensor).hashCode();
+        return this.toString().hashCode();
     }
 
     @Override

@@ -27,7 +27,8 @@ public class Main {
         int numsensors = 5;
 
         RedesBoard board = new RedesBoard(seed,numcentros,numsensors );
-
+        System.out.println("Finished initializing");
+        System.out.println(board.getIncidentConnected());
         // Create the Problem object
         Problem p = new  Problem(board,
                                 new RedesSuccesorFunction(),
