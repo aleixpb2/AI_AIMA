@@ -151,9 +151,9 @@ public class RedesBoard {
     }
 
     public double computeTotalDistanceCost (){
-        double dist = 0;
+        double sum = 0;
         for (Pairintbool i : incidentConnected.keySet()){
-
+            System.out.println("Inside computeTotalDistanceCost with "+ i.toString());
             if (i.isSensor()){
                 int x1 = sensors[i.getID()].getCoordX();
                 int y1 = sensors[i.getID()].getCoordY();
@@ -161,7 +161,7 @@ public class RedesBoard {
                 for (int j=0; j<sensorlist.size(); ++j){
                     int x2 = sensors[sensorlist.get(j)].getCoordX();
                     int y2 = sensors[sensorlist.get(j)].getCoordY();
-                    dist += getDist(x1,x2,y1,y2);
+                    sum += Math.sqrt(getDist(x1,x2,y1,y2)) * sensors[sensorlist.get(j)].getCurrentCap();
                 }
             }
             else {
@@ -171,12 +171,11 @@ public class RedesBoard {
                 for (int j=0; j<sensorlist.size(); ++j){
                     int x2 = sensors[sensorlist.get(j)].getCoordX();
                     int y2 = sensors[sensorlist.get(j)].getCoordY();
-                    dist += getDist(x1,x2,y1,y2);
+                    sum += Math.sqrt(getDist(x1,x2,y1,y2)) * sensors[sensorlist.get(j)].getCurrentCap();
                 }
             }
-
         }
-        return dist;
+        return sum;
     }
 
     /**
@@ -210,11 +209,9 @@ public class RedesBoard {
     private boolean isPossibleAdd(int id2, Pairintbool p){
 
         if(p.isSensor()){
-            if(sensors[id2].getLast().equals(sensors[p.getID()].getLast())) return false;
+            if(sensors[id2].getLast().getID()== sensors[p.getID()].getLast().getID()) return false;
             if (incidentConnected.keySet().contains(p)) {
                 ArrayList<Integer> l = incidentConnected.get(p);
-                //checkCapacityRecursive(p, sensors[id2].getCurrentCap()); <- si la capacitat es maxima, es pot afegir igualment
-
                 return l.size() < 3;
             }
             else return true;
@@ -309,7 +306,7 @@ public class RedesBoard {
 
     }
     public void lastRecurse (Pairintbool p, Pairintbool last){
-
+        System.out.println("Assigning "+p.getID()+" to last of tree "+ last.getID());
         sensors[p.getID()].setLast(last);
         if (incidentConnected.keySet().contains(p)){
             ArrayList<Integer> fills =incidentConnected.get(p);

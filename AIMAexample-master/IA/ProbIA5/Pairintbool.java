@@ -27,4 +27,9 @@ public class Pairintbool {
     public void setID(int ID) {
         this.ID = ID;
     }
+
+    public String toString(){
+        String a = "ID: "+ ID + ", is sensor: " + isSensor;
+        return a;
+    }
 }

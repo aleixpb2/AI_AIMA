@@ -23,8 +23,8 @@ public class Main {
          *    count(0,prob) % 2 == count(0,sol) %2
          */
         int seed = 30;
-        int numcentros = 4;
-        int numsensors = 100;
+        int numcentros = 1;
+        int numsensors = 5;
 
         RedesBoard board = new RedesBoard(seed,numcentros,numsensors );
 
