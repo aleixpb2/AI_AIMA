@@ -48,9 +48,11 @@ public class RedesBoard {
 
         Random myRandom=new Random();
         int j;
+        int maxIter = sensors.length;
         for (int i=0; i<sensors.length; ++i) {
             Pairintbool currentsensor = new Pairintbool(i,true);
             boolean sensor;
+            int aux = 0;
             do {
                 sensor = true;
                 j = myRandom.nextInt(sensors.length + centros.length);
@@ -59,7 +61,18 @@ public class RedesBoard {
                     sensor = false;
                     //System.out.println ("                                                This shouldn't be different to 0: "+j);
                 }
-            } while (!createArc(currentsensor, new Pairintbool(j, sensor)));
+                aux ++;
+            } while (aux<maxIter && !createArc(currentsensor, new Pairintbool(j, sensor)) );
+            if (aux==maxIter){
+                System.out.println("aux>=maxiter");
+                // if we've iterated too much, we try to connect it only with centers
+                do {
+                    sensor = false;
+                    j = myRandom.nextInt(centros.length);
+                    System.out.println ("J = "+j);
+                    aux ++;
+                } while (!createArc(currentsensor, new Pairintbool(j, sensor)) );
+            }
 //TODO Possible infinite loop
         }
     }
@@ -217,8 +230,12 @@ public class RedesBoard {
             }
             else return true;
         }else{
-            ArrayList<Integer> l = incidentConnected.get(p);
-            return  l.size() < 25;
+            System.out.println ("Trying to add to a center");
+            if (incidentConnected.keySet().contains(p)) {
+                ArrayList<Integer> l = incidentConnected.get(p);
+                return l.size() < 25;
+            }
+            else return true;
         }
     }
     public boolean checkCapacity (int id2, Pairintbool p){// id2: sensor we want to connect p: sensor or center to which we want to connect
@@ -245,25 +262,30 @@ public class RedesBoard {
 
 
     public boolean createArc(Pairintbool p1, Pairintbool p2)  {
-//        System.out.println ("Trying to create arc between "+p1.getID()+" "+p1.isSensor()+" and "+p2.getID()+" "+p2.isSensor());
-        if (!connexions.containsKey(p1.getID()) && isPossibleAdd(p2.getID(), p1 )){
+        //System.out.println ("Trying to create arc between "+p1.getID()+" "+p1.isSensor()+" and "+p2.getID()+" "+p2.isSensor());
+        if (!connexions.containsKey(p1.getID()) && isPossibleAdd(p1.getID(), p2 )){
             connexions.put(p1.getID(), p2);
             SensorM sensorm = sensors[p1.getID()];
             //En caso de poder añadir mas informacion, la añadimos. Sino, no actualizamos el volumen de informacion
             if (checkCapacity(p1.getID(),p2)) capacityRecursive(p2, sensorm.getCurrentCap());
 
             if (incidentConnected.containsKey(p2)) {
-                System.out.println("lel");
                 ArrayList<Integer> l = incidentConnected.get(p2);
                 l.add(p1.getID());
                 incidentConnected.put(p2,l);
             } else {
-                System.out.println("altre");
                 ArrayList<Integer> l = new ArrayList<Integer>();
                 l.add(p1.getID());
                 incidentConnected.put(p2,l);
             }
-            lastRecurse(p1,sensors[p2.getID()].getLast());
+            if (p2.isSensor()) {
+                //if it's a sensor, we have to check the last element
+                lastRecurse(p1, sensors[p2.getID()].getLast());
+            }
+            else {
+                //if it's a center the last element is itself - always.
+                lastRecurse(p1,p2);
+            }
             System.out.println ("Successfully created arc between "+p1.getID()+" "+p1.isSensor()+" and "+p2.getID()+" "+p2.isSensor());
             return true;
         } else return false; // p1 is already connected or the connection is impossible
