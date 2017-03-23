@@ -87,7 +87,7 @@ public class Main {
     
     private static void printActions(List actions) {
         for (int i = 0; i < actions.size(); i++) {
-            String action = (String) actions.get(i);
+            String action = actions.get(i).toString();
             System.out.println(action);
         }
     }

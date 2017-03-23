@@ -59,17 +59,14 @@ public class RedesBoard {
                 if (j >= sensors.length) {
                     j -= sensors.length;
                     sensor = false;
-                    //System.out.println ("                                                This shouldn't be different to 0: "+j);
                 }
                 aux ++;
             } while (aux<maxIter && !createArc(currentsensor, new Pairintbool(j, sensor)) );
             if (aux==maxIter){
-                System.out.println("aux>=maxiter");
                 // if we've iterated too much, we try to connect it only with centers
                 do {
                     sensor = false;
                     j = myRandom.nextInt(centros.length);
-                    System.out.println ("J = "+j);
                     aux ++;
                 } while (!createArc(currentsensor, new Pairintbool(j, sensor)) );
             }
@@ -113,7 +110,19 @@ public class RedesBoard {
 
 
     public RedesBoard copy (){
-        RedesBoard newBoard = new RedesBoard((HashMap<Integer,Pairintbool>)this.getConnexions().clone(),(HashMap<Pairintbool, ArrayList<Integer>> )this.getIncidentConnected().clone(),this.getSensors().clone(),this.getCentros(),this.getDist_matrix());
+        //create deep copy
+        HashMap<Integer,Pairintbool> newConnexions = new HashMap<Integer, Pairintbool>();
+        for (Integer i : this.getConnexions().keySet()){
+            newConnexions.put(i,new Pairintbool(this.getConnexions().get(i).getID(),this.getConnexions().get(i).isSensor()));
+        }
+        HashMap<Pairintbool,ArrayList<Integer>> newIncident = new HashMap<Pairintbool, ArrayList<Integer>>();
+        for (Pairintbool i : this.getIncidentConnected().keySet()){
+            newIncident.put(i,new ArrayList<Integer>(this.getIncidentConnected().get(i)));
+        }
+        SensorM[] newsensors = new SensorM[this.sensors.length];
+        for (int i=0; i<sensors.length;++i) newsensors[i] = sensors[i].copy();
+
+        RedesBoard newBoard = new RedesBoard(newConnexions,newIncident,newsensors,this.getCentros(),this.getDist_matrix());
         return newBoard;
     }
 
@@ -167,7 +176,6 @@ public class RedesBoard {
     public double computeTotalDistanceCost (){
         double sum = 0;
         for (Pairintbool i : incidentConnected.keySet()){
-            System.out.println("Inside computeTotalDistanceCost with "+ i.toString());
             if (i.isSensor()){
                 int x1 = sensors[i.getID()].getCoordX();
                 int y1 = sensors[i.getID()].getCoordY();
@@ -230,7 +238,7 @@ public class RedesBoard {
             }
             else return true;
         }else{
-            System.out.println ("Trying to add to a center");
+
             if (incidentConnected.keySet().contains(p)) {
                 ArrayList<Integer> l = incidentConnected.get(p);
                 return l.size() < 25;
@@ -262,7 +270,7 @@ public class RedesBoard {
 
 
     public boolean createArc(Pairintbool p1, Pairintbool p2)  {
-        //System.out.println ("Trying to create arc between "+p1.getID()+" "+p1.isSensor()+" and "+p2.getID()+" "+p2.isSensor());
+       // System.out.println ("Trying to create arc between "+p1.getID()+" "+p1.isSensor()+" and "+p2.getID()+" "+p2.isSensor() +"amd lasts are "+sensors[p1.getID()].getLast()+" "+sensors[p2.getID()].getLast());
         if (!connexions.containsKey(p1.getID()) && isPossibleAdd(p1.getID(), p2 )){
             connexions.put(p1.getID(), p2);
             SensorM sensorm = sensors[p1.getID()];
@@ -286,7 +294,7 @@ public class RedesBoard {
                 //if it's a center the last element is itself - always.
                 lastRecurse(p1,p2);
             }
-            System.out.println ("Successfully created arc between "+p1.getID()+" "+p1.isSensor()+" and "+p2.getID()+" "+p2.isSensor());
+            //System.out.println ("Successfully created arc between "+p1.getID()+" "+p1.isSensor()+" and "+p2.getID()+" "+p2.isSensor());
             return true;
         } else return false; // p1 is already connected or the connection is impossible
     }
@@ -323,18 +331,16 @@ public class RedesBoard {
     public void capacityRecursive(Pairintbool p, double deltaCapacity){
         if(connexions.containsKey(p.getID()) && p.isSensor())  { // is not a leaf
             sensors[p.getID()].setCurrentCap(deltaCapacity + sensors[p.getID()].getCurrentCap());
-            //System.out.println(p.getID());
 
             capacityRecursive(connexions.get(p.getID()), deltaCapacity);
             }
 
     }
     public void lastRecurse (Pairintbool p, Pairintbool last){
-        System.out.println("Assigning "+p.getID()+" last = "+ last.getID() + last.isSensor());
+       // System.out.println("Assigning "+p.getID()+" last = "+ last.getID() + last.isSensor());
         sensors[p.getID()].setLast(last);
         if (incidentConnected.keySet().contains(p)){
             ArrayList<Integer> fills =incidentConnected.get(p);
-            for (int i=0; i<fills.size(); ++i) System.out.println (fills.get(i));
             for (int i=0; i<fills.size(); ++i){
                 lastRecurse(new Pairintbool(fills.get(i),true),last);
             }
@@ -345,7 +351,7 @@ public class RedesBoard {
 
         if(sensors[p.getID()].getCurrentCap() + capToAdd > sensors[p.getID()].getCapacidad()*3) return false;
         if(connexions.containsKey(p.getID()) && p.isSensor()) { // is not a leaf
-            System.out.println ("checking "+p.isSensor()+" "+p.getID()+"which has a capacity of "+sensors[p.getID()].getCapacidad()*3 +" adding capacity of "+capToAdd);
+            //System.out.println ("checking "+p.isSensor()+" "+p.getID()+"which has a capacity of "+sensors[p.getID()].getCapacidad()*3 +" adding capacity of "+capToAdd);
             return checkCapacityRecursive(connexions.get(p.getID()), capToAdd);
         }else{
             return true;

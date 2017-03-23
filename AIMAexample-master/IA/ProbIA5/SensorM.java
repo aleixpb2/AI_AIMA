@@ -39,4 +39,8 @@ public class SensorM extends Sensor {
         this.currentCap = s.getCapacidad();
         last = new Pairintbool(id, true);
     }
+
+    public SensorM copy (){
+        return new SensorM((int)this.getCapacidad(),this.getCoordX(),this.getCoordY(),this.getLast().getID());
+    }
 }
