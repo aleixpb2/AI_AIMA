@@ -32,4 +32,19 @@ public class Pairintbool {
         String a = "ID: "+ ID + ", is sensor: " + isSensor;
         return a;
     }
+
+    @Override
+    public int hashCode() {
+        return String.valueOf(ID).hashCode()+String.valueOf(isSensor).hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Pairintbool))
+            return false;
+        if (obj == this)
+            return true;
+        Pairintbool p = (Pairintbool) obj;
+        return ID == p.getID() && p.isSensor == isSensor;
+    }
 }

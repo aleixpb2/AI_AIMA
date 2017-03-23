@@ -253,10 +253,12 @@ public class RedesBoard {
             if (checkCapacity(p1.getID(),p2)) capacityRecursive(p2, sensorm.getCurrentCap());
 
             if (incidentConnected.containsKey(p2)) {
+                System.out.println("lel");
                 ArrayList<Integer> l = incidentConnected.get(p2);
                 l.add(p1.getID());
                 incidentConnected.put(p2,l);
             } else {
+                System.out.println("altre");
                 ArrayList<Integer> l = new ArrayList<Integer>();
                 l.add(p1.getID());
                 incidentConnected.put(p2,l);
