@@ -3,6 +3,7 @@ package IA.ProbIA5;
 import IA.Red.Centro;
 import IA.Red.CentrosDatos;
 import IA.Red.Sensores;
+import aima.util.Pair;
 
 import java.util.*;
 
@@ -40,8 +41,10 @@ public class RedesBoard {
             dist_matrix = new ArrayList<ArrayList<IdDistSensor>>();
             generarDistMatrix();
         }
-        generarConexionesRandom();
-        //generarConexionesInicial();
+
+        //triar quina de les dos
+        //generarConexionesRandom();
+        generarConexionesInicial();
     }
 
     private void generarConexionesRandom (){
@@ -70,7 +73,6 @@ public class RedesBoard {
                     aux ++;
                 } while (!createArc(currentsensor, new Pairintbool(j, sensor)) );
             }
-//TODO Possible infinite loop
         }
     }
     private RedesBoard (HashMap<Integer,Pairintbool>  connex,  HashMap<Pairintbool, ArrayList<Integer>>incidentConnec,SensorM[] sensorlist,Centro[] centroslist,ArrayList<ArrayList<IdDistSensor> > dist_matr){
@@ -126,16 +128,20 @@ public class RedesBoard {
         return newBoard;
     }
 
-    /* vvvvv TO COMPLETE vvvvv */
+
 
     private void generarConexionesInicial (){
         for(int i = 0; i < sensors.length; ++i) {
-            Pairintbool closer = new Pairintbool(dist_matrix.get(i).get(0).getID(),dist_matrix.get(i).get(0).isSensor()); // get the closest
-            try {
-                createArc(new Pairintbool(i, true), closer);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            int nextcloser = 0;
+            Pairintbool currentsensor = new Pairintbool(i,true);
+            int closerid;
+            boolean closersensor;
+            do {
+                closerid = dist_matrix.get(i).get(nextcloser).getID();
+                closersensor = dist_matrix.get(i).get(nextcloser).isSensor();
+                nextcloser++;
+
+            } while (!createArc(currentsensor, new Pairintbool(closerid, closersensor)));
         }
     }
     private void generarDistMatrix(){
@@ -270,7 +276,6 @@ public class RedesBoard {
 
 
     public boolean createArc(Pairintbool p1, Pairintbool p2)  {
-       // System.out.println ("Trying to create arc between "+p1.getID()+" "+p1.isSensor()+" and "+p2.getID()+" "+p2.isSensor() +"amd lasts are "+sensors[p1.getID()].getLast()+" "+sensors[p2.getID()].getLast());
         if (!connexions.containsKey(p1.getID()) && isPossibleAdd(p1.getID(), p2 )){
             connexions.put(p1.getID(), p2);
             SensorM sensorm = sensors[p1.getID()];
