@@ -22,11 +22,12 @@ public class Main {
          *  For a problem to be solvable:
          *    count(0,prob) % 2 == count(0,sol) %2
          */
-        int seed = 30;
-        int numcentros = 4;
+        int seedcentros = 1234;
+        int seedsensores = 4321;
+        int numcentros = 5;
         int numsensors = 100;
 
-        RedesBoard board = new RedesBoard(seed,numcentros,numsensors );
+        RedesBoard board = new RedesBoard(seedcentros,seedsensores, numcentros,numsensors );
         System.out.println("Finished initializing");
         System.out.println(board.getIncidentConnected());
         // Create the Problem object

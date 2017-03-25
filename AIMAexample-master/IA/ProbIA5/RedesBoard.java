@@ -22,9 +22,9 @@ public class RedesBoard {
     //TODO GENERATE GETTERS AND SETTERS FOR OTHER FUNCTIONS : WHICH DO WE NEED?
     /* Constructor */
 
-    public RedesBoard(int seed, int ncent, int nsens) {
-        CentrosDatos cd = new CentrosDatos(ncent,seed);
-        Sensores sensores = new Sensores(nsens,seed);
+    public RedesBoard(int seedcentros, int seedsensores, int ncent, int nsens) {
+        CentrosDatos cd = new CentrosDatos(ncent,seedcentros);
+        Sensores sensores = new Sensores(nsens,seedsensores);
         centros = new Centro[cd.size()];
         sensors = new SensorM[sensores.size()];
         for (int i= 0 ; i<cd.size(); ++i){
