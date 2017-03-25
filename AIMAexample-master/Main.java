@@ -16,6 +16,8 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) throws Exception{
+        final long startTime = System.nanoTime();
+
         /**
          *  For a problem to be solvable:
          *    count(0,prob) % 2 == count(0,sol) %2
@@ -72,6 +74,9 @@ public class Main {
         // You can access also to the goal state using the
 	// method getGoalState of class Search
 
+        final long duration = System.nanoTime() - startTime;
+        System.out.println(duration);
+
     }
 
         private static void printInstrumentation(Properties properties) {
@@ -90,5 +95,5 @@ public class Main {
             System.out.println(action);
         }
     }
-    
+
 }
