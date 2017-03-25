@@ -16,7 +16,7 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) throws Exception{
-        final long startTime = System.nanoTime();
+
 
         /**
          *  For a problem to be solvable:
@@ -42,14 +42,16 @@ public class Main {
         Scanner sc =new Scanner(System.in);
         String str=sc.next();
         boolean HC = str.equals("y");
-
+        final long startTime;
         SearchAgent agent;
         if(HC) {// Hill Climbing, no parameters
+            startTime = System.nanoTime();
             Search algHC = new HillClimbingSearch();
 
             // Instantiate the SearchAgent object
             agent = new SearchAgent(p, algHC);
         }else {
+            startTime = System.nanoTime();
             // Simmulated Annealing, 4 parameters: max iterations, iterations per temperature step
             // and temperature function parameters k and lambda
             System.out.println("Maximum iterations:");
@@ -75,7 +77,7 @@ public class Main {
 	// method getGoalState of class Search
 
         final long duration = System.nanoTime() - startTime;
-        System.out.println(duration);
+        System.out.println(duration+" ns");
 
     }
 
