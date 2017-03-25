@@ -2,11 +2,9 @@ import IA.ProbIA5.RedesBoard;
 import IA.ProbIA5.RedesGoalTest;
 import IA.ProbIA5.RedesHeuristicFunction;
 import IA.ProbIA5.RedesSuccesorFunction;
-import aima.search.framework.GraphSearch;
 import aima.search.framework.Problem;
 import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
-import aima.search.informed.AStarSearch;
 import aima.search.informed.HillClimbingSearch;
 import aima.search.informed.SimulatedAnnealingSearch;
 
@@ -24,12 +22,12 @@ public class Main {
          */
         int seedcentros = 1234;
         int seedsensores = 4321;
-        int numcentros = 5;
+        int numcentros = 4;
         int numsensors = 100;
 
         RedesBoard board = new RedesBoard(seedcentros,seedsensores, numcentros,numsensors );
-        System.out.println("Finished initializing");
-        System.out.println(board.getIncidentConnected());
+        //System.out.println("Finished initializing");
+        //System.out.println(board.getIncidentConnected());
         // Create the Problem object
         Problem p = new  Problem(board,
                                 new RedesSuccesorFunction(),

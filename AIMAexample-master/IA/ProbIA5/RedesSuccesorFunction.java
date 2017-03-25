@@ -19,12 +19,12 @@ public class RedesSuccesorFunction implements SuccessorFunction{
             Pairintbool p2 = connexions.get(i);
             for (int j = 0; j < rb.nSensors(); ++j){ // for all sensors
                 RedesBoard newBoard = rb.copy();
-                System.out.println ("NEW ITERATION!!!!! Initial board is-------------");
-                System.out.println(newBoard.getIncidentConnected());
+                //System.out.println ("NEW ITERATION!!!!! Initial board is-------------");
+                //System.out.println(newBoard.getIncidentConnected());
                 if(newBoard.changeArc(p1, p2, new Pairintbool(j, true))){
 
-                    System.out.println ("           It has changed to this:");
-                    System.out.println("            "+newBoard.getIncidentConnected());
+                    //System.out.println ("           It has changed to this:");
+                    //System.out.println("            "+newBoard.getIncidentConnected());
                     double v = redesHF.getHeuristicValue(newBoard);
                     String S = RedesBoard.SWAP + " " + i + " " + j + " sensor. Cost(" + v + ") ---> \n" + newBoard.toString();
                     l.add(new Successor(S, newBoard));
