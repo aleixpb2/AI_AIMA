@@ -50,6 +50,10 @@ public class Main {
 
             // Instantiate the SearchAgent object
             agent = new SearchAgent(p, algHC);
+            RedesBoard finalB = (RedesBoard) algHC.getGoalState();
+            System.out.println (finalB.computeTotalDistanceCost());
+            System.out.println (finalB.computeTotalTransmitted());
+
         }else {
             startTime = System.nanoTime();
             // Simmulated Annealing, 4 parameters: max iterations, iterations per temperature step
@@ -82,6 +86,7 @@ public class Main {
     }
 
         private static void printInstrumentation(Properties properties) {
+
         Iterator keys = properties.keySet().iterator();
         while (keys.hasNext()) {
             String key = (String) keys.next();

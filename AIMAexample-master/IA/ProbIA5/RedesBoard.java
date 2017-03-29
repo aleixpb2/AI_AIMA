@@ -179,8 +179,9 @@ public class RedesBoard {
         return dist;
     }
 
-    public double computeTotalDistanceCost (){
-        double sum = 0;
+    public PairCosts computeTotalDistanceCost (){
+        double cost_sum = 0;
+        double distance_sum = 0;
         for (Pairintbool i : incidentConnected.keySet()){
             if (i.isSensor()){
                 int x1 = sensors[i.getID()].getCoordX();
@@ -189,7 +190,8 @@ public class RedesBoard {
                 for (int j=0; j<sensorlist.size(); ++j){
                     int x2 = sensors[sensorlist.get(j)].getCoordX();
                     int y2 = sensors[sensorlist.get(j)].getCoordY();
-                    sum += Math.sqrt(getDist(x1,x2,y1,y2)) * sensors[sensorlist.get(j)].getCurrentCap();
+                    cost_sum += getDist(x1,x2,y1,y2) * sensors[sensorlist.get(j)].getCurrentCap();
+                    distance_sum += Math.sqrt(getDist(x1,x2,y1,y2));
                 }
             }
             else {
@@ -199,11 +201,13 @@ public class RedesBoard {
                 for (int j=0; j<sensorlist.size(); ++j){
                     int x2 = sensors[sensorlist.get(j)].getCoordX();
                     int y2 = sensors[sensorlist.get(j)].getCoordY();
-                    sum += Math.sqrt(getDist(x1,x2,y1,y2)) * sensors[sensorlist.get(j)].getCurrentCap();
+                    cost_sum += getDist(x1,x2,y1,y2) * sensors[sensorlist.get(j)].getCurrentCap();
+                    distance_sum += Math.sqrt(getDist(x1,x2,y1,y2)) ;
+
                 }
             }
         }
-        return sum;
+        return new PairCosts(cost_sum,distance_sum);
     }
 
     /**
@@ -216,6 +220,7 @@ public class RedesBoard {
             if (!i.isSensor()){ //si es centro
                 ArrayList<Integer>sensorlist = incidentConnected.get(i);
                 for (int j=0; j<sensorlist.size(); ++j){
+                    //System.out.println (sensors[sensorlist.get(j)].getCurrentCap());
                     transm+= sensors[sensorlist.get(j)].getCurrentCap();
                 }
 
@@ -225,6 +230,7 @@ public class RedesBoard {
         }
         return transm;
     }
+
 
     // Operators
 
@@ -237,7 +243,9 @@ public class RedesBoard {
     private boolean isPossibleAdd(int id2, Pairintbool p){
 
         if(p.isSensor()){
+            //System.out.println("[IsPossibleAdd]"+sensors[id2].getLast().equals(sensors[p.getID()].getLast()));
             if(sensors[id2].getLast().equals(sensors[p.getID()].getLast())) return false;
+
             if (incidentConnected.keySet().contains(p)) {
                 ArrayList<Integer> l = incidentConnected.get(p);
                 return l.size() < 3;
@@ -309,8 +317,18 @@ public class RedesBoard {
             connexions.remove(p1.getID());
             SensorM sensorm = sensors[p1.getID()];
             //Siempre podremos sacar informacion asi que actualizamos el volumen de informacion
-            capacityRecursive(p2, -sensorm.getCurrentCap());
 
+            ArrayList<Integer> incidP2 = incidentConnected.get(p2);
+
+
+            int sum_cap = 0;
+            for (int i=0; i<incidP2.size(); ++i) sum_cap+= sensors[incidP2.get(i)].getCurrentCap();
+
+
+
+            if (sum_cap<=sensors[p2.getID()].getCurrentCap()) {
+                capacityRecursive(p2, -sensorm.getCurrentCap());
+            }
             ArrayList<Integer> l = incidentConnected.get(p2);
             for(int i = 0; i < l.size(); ++i){
                 if(l.get(i).equals(p1.getID())){
@@ -328,8 +346,21 @@ public class RedesBoard {
     }
 
     public boolean changeArc(Pairintbool p1, Pairintbool p2, Pairintbool p3)  {
-            if (removeArc(p1, p2)) return createArc(p1, p3);
-            else return false;
+            if (removeArc(p1, p2)) {
+                //System.out.println ("Remove OK");
+                if (createArc(p1, p3)) return true;
+                else {
+                    //System.out.println (connexions.containsKey(p1.getID()));
+                    //System.out.println("Not created");
+                    createArc(p1,p2);
+                    return false;
+                }
+            }
+            else {
+
+                //System.out.println ("remove between "+p1+" "+p2+"fail");
+                return false;
+            }
 
     }
 
@@ -372,7 +403,7 @@ public class RedesBoard {
             else retVal+=("Center ");
             retVal+=(String.valueOf(i.getID())+"---> Sensors:");
             for (int j=0; j<current.size(); ++j){
-                retVal+= String.valueOf(current.get(j));
+                retVal+= String.valueOf(current.get(j))+",";
 
             }
             retVal+="\n";
