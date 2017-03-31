@@ -419,4 +419,25 @@ public class RedesBoard {
             sum += sensors[i].getCapacidad();
         return sum;
     }
+
+    public ArrayList<Integer> sensorsInTree(){ // returns a set with the sensor IDs connected to a center
+        ArrayList<Integer> visited = new ArrayList<Integer>();
+        for(int i = 0; i < nSensors();++i)
+            visited.add(0);
+        Stack<Integer> s = new Stack<Integer>();
+        for(int i = 0; i < nCentros(); ++i){
+            ArrayList<Integer> list = incidentConnected.get(new Pairintbool(i, false));
+            for(int j = 0; j < list.size(); ++j) s.push(list.get(j));
+        }
+        if(!s.empty())sensorsInTreeRec(s, visited, s.pop());
+        return visited;
+    }
+    private void sensorsInTreeRec(Stack<Integer> s,ArrayList<Integer> visited, int act){
+        visited.set(act, 1);
+        ArrayList<Integer> list = incidentConnected.get(new Pairintbool(act, true));
+        if(list != null){
+            for(int j = 0; j < list.size(); ++j) s.push(list.get(j));
+        }
+        if(!s.empty()) sensorsInTreeRec(s, visited, s.pop());
+    }
 }
