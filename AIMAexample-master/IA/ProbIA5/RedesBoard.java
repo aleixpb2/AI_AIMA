@@ -329,7 +329,7 @@ public class RedesBoard {
             //Siempre podremos sacar informacion asi que actualizamos el volumen de informacion
 
             ArrayList<Integer> incidP2 = incidentConnected.get(p2);
-            System.out.print("ABout to remove arc from "+p1+" to "+p2 +" whose capacities are "+sensorm.getCurrentCap()+ ", "+sensors[p2.getID()].getCurrentCap());
+            System.out.println("About to remove arc from "+p1+" to "+p2 +" whose capacities are "+sensorm.getCurrentCap()+ ", "+sensors[p2.getID()].getCurrentCap());
             capacityRecursive(p2, -Math.min(sensorm.getCurrentCap(), sensorm.getCapacidad()*3));
             ArrayList<Integer> l = incidentConnected.get(p2);
             for(int i = 0; i < l.size(); ++i){
@@ -369,12 +369,19 @@ public class RedesBoard {
 
     public void capacityRecursive(Pairintbool p, double deltaCapacity){
         if(connexions.containsKey(p.getID()) && p.isSensor())  { // is not a leaf
-
             sensors[p.getID()].setCurrentCap(deltaCapacity + sensors[p.getID()].getCurrentCap());
+
+            /*TODO Check if fine.
+            Dan's Shitty Patches, Cap edition: Posa-hi com a minim la capacitat del sensor encara que ho restis tot.
+             */
+            if (sensors[p.getID()].getCurrentCap() <= sensors[p.getID()].getCapacidad()){
+                sensors[p.getID()].setCurrentCap(sensors[p.getID()].getCapacidad());
+            }
+            /*
             if (sensors[p.getID()].getCurrentCap()<=0){
                 System.out.println (p+" reached negative when deleting "+deltaCapacity);
-
             }
+            */
             capacityRecursive(connexions.get(p.getID()), deltaCapacity);
         }
 
@@ -409,9 +416,9 @@ public class RedesBoard {
             ArrayList<Integer> current = incidentConnected.get(i);
             if (i.isSensor()) retVal+= ("Sensor ");
             else retVal+=("Center ");
-            retVal+=(String.valueOf(i.getID())+"which has a capacity of "+sensors[i.getID()].getCapacidad() +"---> Sensors:");
+            retVal+=(String.valueOf(i.getID())+" with a capacity of "+sensors[i.getID()].getCapacidad() +" ---> Sensors: ");
             for (int j=0; j<current.size(); ++j){
-                retVal+= String.valueOf(current.get(j))+"which has capacity of "+sensors[j].getCapacidad()+",";
+                retVal+= String.valueOf(current.get(j))+" with a capacity of "+sensors[j].getCapacidad()+",";
 
             }
             retVal+="\n";
