@@ -29,6 +29,8 @@ public class RedesSuccesorFunction implements SuccessorFunction{
 
 
                 Pairintbool p3 = new Pairintbool(j, true);
+                SensorM[] currentsensorsArray  = newBoard.getSensors();
+
                 if (!p1.equals(p3)){
                     if (newBoard.changeArc(p1, p2, p3)) {
 
@@ -51,6 +53,13 @@ public class RedesSuccesorFunction implements SuccessorFunction{
                         int rand1;
 
                         ArrayList<Integer> incidP3 = incidents.get(p3);
+                        if (incidP3!=null && incidP3.size()>=3){
+                            rand1=myRandom.nextInt(incidP3.size());
+                            Pairintbool selectedRemove = new Pairintbool(incidP3.get(rand1),true);
+                            newBoard.removeArc(selectedRemove,p3);
+                            newBoard.changeArc(p1,p2,p3);
+                            newBoard.createArc(selectedRemove,p2);
+                        }
                         System.out.println("incidents in p3 are " + incidP3);
                         System.out.println(p1);
                         System.out.println(p2);

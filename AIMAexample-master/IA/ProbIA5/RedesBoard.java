@@ -220,8 +220,10 @@ public class RedesBoard {
             if (!i.isSensor()){ //si es centro
                 double sumCent = 0;
                 ArrayList<Integer>sensorlist = incidentConnected.get(i);
+                System.out.println ("Fors center "+i+"the capacity is");
                 for (int j=0; j<sensorlist.size(); ++j){
-                    //System.out.println (sensors[sensorlist.get(j)].getCurrentCap());
+                    System.out.println (sensorlist.get(j)+" has a current cap of "+sensors[sensorlist.get(j)].getCurrentCap());
+
                     sumCent+= Math.min(sensors[sensorlist.get(j)].getCurrentCap(), sensors[sensorlist.get(j)].getCapacidad()*3);
                 }
                 transm += Math.min(sumCent, 150);
@@ -327,6 +329,7 @@ public class RedesBoard {
             //Siempre podremos sacar informacion asi que actualizamos el volumen de informacion
 
             ArrayList<Integer> incidP2 = incidentConnected.get(p2);
+            System.out.print("ABout to remove arc from "+p1+" to "+p2 +" whose capacities are "+sensorm.getCurrentCap()+ ", "+sensors[p2.getID()].getCurrentCap());
             capacityRecursive(p2, -Math.min(sensorm.getCurrentCap(), sensorm.getCapacidad()*3));
             ArrayList<Integer> l = incidentConnected.get(p2);
             for(int i = 0; i < l.size(); ++i){
@@ -366,8 +369,12 @@ public class RedesBoard {
 
     public void capacityRecursive(Pairintbool p, double deltaCapacity){
         if(connexions.containsKey(p.getID()) && p.isSensor())  { // is not a leaf
-            sensors[p.getID()].setCurrentCap(deltaCapacity + sensors[p.getID()].getCurrentCap());
 
+            sensors[p.getID()].setCurrentCap(deltaCapacity + sensors[p.getID()].getCurrentCap());
+            if (sensors[p.getID()].getCurrentCap()<=0){
+                System.out.println (p+" reached negative when deleting "+deltaCapacity);
+
+            }
             capacityRecursive(connexions.get(p.getID()), deltaCapacity);
         }
 
