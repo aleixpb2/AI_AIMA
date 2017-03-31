@@ -1,8 +1,5 @@
 package IA.ProbIA5;
 
-/**
- * Created by laiafreixas on 8/03/17.
- */
 public class Pairintbool {
     private int ID;
     private boolean isSensor;

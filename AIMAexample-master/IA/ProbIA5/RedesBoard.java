@@ -218,22 +218,19 @@ public class RedesBoard {
         double transm = 0;
         for (Pairintbool i: incidentConnected.keySet()){
             if (!i.isSensor()){ //si es centro
+                double sumCent = 0;
                 ArrayList<Integer>sensorlist = incidentConnected.get(i);
                 for (int j=0; j<sensorlist.size(); ++j){
                     //System.out.println (sensors[sensorlist.get(j)].getCurrentCap());
-                    transm+= sensors[sensorlist.get(j)].getCurrentCap();
+                    sumCent+= Math.min(sensors[sensorlist.get(j)].getCurrentCap(), sensors[sensorlist.get(j)].getCapacidad()*3);
                 }
-
-
+                transm += Math.min(sumCent, 150);
             }
-
         }
         return transm;
     }
 
-
     // Operators
-
     /**
      * In this function we check if the number of sensors connected is less than the maximum, and if we're not creating cycles
      * @param id2 sensor we want to connect
@@ -260,7 +257,7 @@ public class RedesBoard {
             else return true;
         }
     }
-    public boolean checkCapacity (int id2, Pairintbool p){// id2: sensor we want to connect p: sensor or center to which we want to connect
+/*    public boolean checkCapacity (int id2, Pairintbool p){// id2: sensor we want to connect p: sensor or center to which we want to connect
         if (p.isSensor()){
             return checkCapacityRecursive(p,sensors[id2].getCurrentCap());
         }
@@ -276,19 +273,16 @@ public class RedesBoard {
             }
             else return true;
         }
-
-    }
-
-
-
-
+       }
+       */
 
     public boolean createArc(Pairintbool p1, Pairintbool p2)  {
         if (!connexions.containsKey(p1.getID()) && isPossibleAdd(p1.getID(), p2 )){
             connexions.put(p1.getID(), p2);
             SensorM sensorm = sensors[p1.getID()];
             //En caso de poder añadir mas informacion, la añadimos. Sino, no actualizamos el volumen de informacion
-            if (checkCapacity(p1.getID(),p2)) capacityRecursive(p2, sensorm.getCurrentCap());
+            //if (checkCapacity(p1.getID(),p2))
+            capacityRecursive(p2, Math.min(sensorm.getCurrentCap(), sensorm.getCapacidad()*3));
 
             if (incidentConnected.containsKey(p2)) {
                 ArrayList<Integer> l = incidentConnected.get(p2);
@@ -319,16 +313,7 @@ public class RedesBoard {
             //Siempre podremos sacar informacion asi que actualizamos el volumen de informacion
 
             ArrayList<Integer> incidP2 = incidentConnected.get(p2);
-
-
-            int sum_cap = 0;
-            for (int i=0; i<incidP2.size(); ++i) sum_cap+= sensors[incidP2.get(i)].getCurrentCap();
-
-
-
-            if (sum_cap<=sensors[p2.getID()].getCurrentCap()) {
-                capacityRecursive(p2, -sensorm.getCurrentCap());
-            }
+            capacityRecursive(p2, -Math.min(sensorm.getCurrentCap(), sensorm.getCapacidad()*3));
             ArrayList<Integer> l = incidentConnected.get(p2);
             for(int i = 0; i < l.size(); ++i){
                 if(l.get(i).equals(p1.getID())){
@@ -383,7 +368,7 @@ public class RedesBoard {
         }
     }
 
-    public boolean checkCapacityRecursive(Pairintbool p, double capToAdd){
+/*    public boolean checkCapacityRecursive(Pairintbool p, double capToAdd){
 
         if(sensors[p.getID()].getCurrentCap() + capToAdd > sensors[p.getID()].getCapacidad()*3) return false;
         if(connexions.containsKey(p.getID()) && p.isSensor()) { // is not a leaf
@@ -392,7 +377,7 @@ public class RedesBoard {
         }else{
             return true;
         }
-    }
+    }*/
 
     public String toString() {
         String retVal = "";
@@ -410,5 +395,12 @@ public class RedesBoard {
         }
 
         return retVal;
+    }
+
+    public int getMaxInfo(){
+        int sum = 0;
+        for(int i = 0; i < nSensors(); ++i)
+            sum += sensors[i].getCapacidad();
+        return sum;
     }
 }

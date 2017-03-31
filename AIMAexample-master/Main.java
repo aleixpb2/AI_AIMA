@@ -17,15 +17,10 @@ public class Main {
 
     public static void main(String[] args) throws Exception{
 
-
-        /**
-         *  For a problem to be solvable:
-         *    count(0,prob) % 2 == count(0,sol) %2
-         */
         int seedcentros = 1234;
         int seedsensores = 4321;
-        int numcentros = 4;
-        int numsensors = 100;
+        int numcentros = 2;
+        int numsensors = 10;
 
         RedesBoard board = new RedesBoard(seedcentros,seedsensores, numcentros,numsensors );
         //System.out.println("Finished initializing");
@@ -53,6 +48,7 @@ public class Main {
             RedesBoard finalB = (RedesBoard) algHC.getGoalState();
             System.out.println (finalB.computeTotalDistanceCost());
             System.out.println (finalB.computeTotalTransmitted());
+            System.out.println ("Total info of sensors: " + finalB.getMaxInfo());
 
         }else {
             startTime = System.nanoTime();
@@ -72,13 +68,11 @@ public class Main {
             agent = new SearchAgent(p, algSA);
         }
 
-	// We print the results of the search
+	    // We print the results of the search
         System.out.println();
         printActions(agent.getActions());
         printInstrumentation(agent.getInstrumentation());
 
-        // You can access also to the goal state using the
-	// method getGoalState of class Search
 
         final long duration = System.nanoTime() - startTime;
         System.out.println(duration+" ns");

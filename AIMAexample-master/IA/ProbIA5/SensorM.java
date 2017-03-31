@@ -2,9 +2,6 @@ package IA.ProbIA5;
 
 import IA.Red.Sensor;
 
-/**
- * Created by aleix.paris on 15/03/2017.
- */
 public class SensorM extends Sensor {
 
     private double currentCap;

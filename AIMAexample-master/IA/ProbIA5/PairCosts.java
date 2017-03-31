@@ -1,11 +1,8 @@
 package IA.ProbIA5;
 
-/**
- * Created by laiafreixas on 29/03/17.
- */
 public class PairCosts {
-    private double first;
-    private double second;
+    private double first; // v*distance()^2
+    private double second; // sum( distance() )
 
     public PairCosts(double first, double second) {
         this.first = first;
