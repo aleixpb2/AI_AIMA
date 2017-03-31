@@ -214,13 +214,13 @@ public class RedesBoard {
      * suponiendo que currentCap de cada sensor es la cantidad de informacion acumulada hasta entonces
      * @return transm : la suma de la cantidad de informacion acumulada que llegan a todos los centros
      */
-    public double computeTotalTransmitted (){
+    public double computeTotalTransmitted(){
         double transm = 0;
         for (Pairintbool i: incidentConnected.keySet()){
             if (!i.isSensor()){ //si es centro
                 double sumCent = 0;
                 ArrayList<Integer>sensorlist = incidentConnected.get(i);
-                System.out.println ("Fors center "+i+"the capacity is");
+                System.out.println("Fors center "+i+" the capacity is");
                 for (int j=0; j<sensorlist.size(); ++j){
                     System.out.println (sensorlist.get(j)+" has a current cap of "+sensors[sensorlist.get(j)].getCurrentCap());
 
@@ -368,21 +368,23 @@ public class RedesBoard {
     }
 
     public void capacityRecursive(Pairintbool p, double deltaCapacity){
-        if(connexions.containsKey(p.getID()) && p.isSensor())  { // is not a leaf
+        if(p.isSensor())  {
             sensors[p.getID()].setCurrentCap(deltaCapacity + sensors[p.getID()].getCurrentCap());
 
             /*TODO Check if fine.
             Dan's Shitty Patches, Cap edition: Posa-hi com a minim la capacitat del sensor encara que ho restis tot.
              */
             if (sensors[p.getID()].getCurrentCap() <= sensors[p.getID()].getCapacidad()){
-                sensors[p.getID()].setCurrentCap(sensors[p.getID()].getCapacidad());
+                //sensors[p.getID()].setCurrentCap(sensors[p.getID()].getCapacidad());
+                System.out.println("CurrentCap too low!!!");
             }
             /*
             if (sensors[p.getID()].getCurrentCap()<=0){
                 System.out.println (p+" reached negative when deleting "+deltaCapacity);
             }
             */
-            capacityRecursive(connexions.get(p.getID()), deltaCapacity);
+            if(connexions.containsKey(p.getID()))
+                capacityRecursive(connexions.get(p.getID()), deltaCapacity);
         }
 
     }

@@ -17,7 +17,7 @@ public class Main {
         int seedcentros = 1234;
         int seedsensores = 4321;
         int numcentros = 1;
-        int numsensors = 20;
+        int numsensors = 5;
 
         RedesBoard board = new RedesBoard(seedcentros,seedsensores, numcentros,numsensors );
         //System.out.println("Finished initializing");
@@ -79,7 +79,7 @@ public class Main {
 
 
         final long duration = System.nanoTime() - startTime;
-        System.out.println(duration+" ns");
+        System.out.println(duration/1000000+" ms");
 
     }
 
