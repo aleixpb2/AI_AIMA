@@ -2,7 +2,7 @@ package IA.ProbIA5;
 
 import IA.Red.Sensor;
 
-public class SensorM extends Sensor {
+public class SensorM extends Sensor implements Cloneable {
 
     private double currentCap;
 
@@ -36,8 +36,17 @@ public class SensorM extends Sensor {
         this.currentCap = s.getCapacidad();
         last = new Pairintbool(id, true);
     }
-
+/*
     public SensorM copy (){
         return new SensorM((int)this.getCapacidad(),this.getCoordX(),this.getCoordY(),this.getLast().getID());
+    }*/
+    public SensorM clone (){
+        try {
+            return (SensorM) super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            throw  new RuntimeException();
+        }
     }
 }
