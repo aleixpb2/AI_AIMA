@@ -8,10 +8,7 @@ import aima.search.framework.SearchAgent;
 import aima.search.informed.HillClimbingSearch;
 import aima.search.informed.SimulatedAnnealingSearch;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -19,8 +16,8 @@ public class Main {
 
         int seedcentros = 1234;
         int seedsensores = 4321;
-        int numcentros = 2;
-        int numsensors = 10;
+        int numcentros = 1;
+        int numsensors = 20;
 
         RedesBoard board = new RedesBoard(seedcentros,seedsensores, numcentros,numsensors );
         //System.out.println("Finished initializing");
@@ -48,8 +45,15 @@ public class Main {
             RedesBoard finalB = (RedesBoard) algHC.getGoalState();
             System.out.println (finalB.computeTotalDistanceCost());
             System.out.println (finalB.computeTotalTransmitted());
-            System.out.println ("Total info of sensors: " + finalB.getMaxInfo());
-
+            System.out.println ("Total info of sensors: " + finalB.getMaxInfo() + " of maximum centers cap: " + numcentros*150);
+            //System.out.print("Sensors in tree: " + finalB.sensorsInTree());
+            ArrayList<Integer> list = finalB.sensorsInTree();
+            for(int i = 0; i < list.size(); ++i)
+                if(list.get(i) == 0){
+                    System.out.println("ERROR, at least sensor "+ i +" is not connected!");
+                    break;
+                }
+            System.out.println("All sensors are connected");
         }else {
             startTime = System.nanoTime();
             // Simmulated Annealing, 4 parameters: max iterations, iterations per temperature step

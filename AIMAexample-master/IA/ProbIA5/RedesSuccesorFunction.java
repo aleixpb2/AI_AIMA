@@ -46,9 +46,7 @@ public class RedesSuccesorFunction implements SuccessorFunction{
                     rand=myRandom.nextInt(incidP3.size());
 
                     newBoard.removeArc(new Pairintbool(incidP3.get(rand),true),p3);
-                    newBoard.createArc(p1,p3);
-*/
-
+                    newBoard.createArc(p1,p3);*/
                 }
             }
             for (int j = 0; j < rb.nCentros(); ++j){ // for all centros
