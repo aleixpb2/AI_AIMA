@@ -289,7 +289,7 @@ public class RedesBoard {
                 - En cas que si -> COnnectem si isPossibleAdd
                 - En cas que no -> No connectem
         */
-        if ((!connexions.containsKey(p1.getID()) || (connexions.containsKey(p1.getID()) && connexions.get(p1.getID())==null)) && isPossibleAdd(p1.getID(), p2 )){
+        if ((!connexions.containsKey(p1.getID())) && isPossibleAdd(p1.getID(), p2 )){
             connexions.put(p1.getID(), p2);
             SensorM sensorm = sensors[p1.getID()];
             //En caso de poder añadir mas informacion, la añadimos. Sino, no actualizamos el volumen de informacion
