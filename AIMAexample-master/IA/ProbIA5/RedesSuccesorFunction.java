@@ -60,11 +60,12 @@ public class RedesSuccesorFunction implements SuccessorFunction{
                             newBoard.changeArc(p1,p2,p3);
                             newBoard.createArc(selectedRemove,p2);
                         }
+                        /*
                         System.out.println("incidents in p3 are " + incidP3);
                         System.out.println(p1);
                         System.out.println(p2);
                         System.out.println(p3);
-                        System.out.println();
+                        System.out.println();*/
 
 
 

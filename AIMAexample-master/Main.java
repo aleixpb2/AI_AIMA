@@ -16,8 +16,8 @@ public class Main {
 
         int seedcentros = 1234;
         int seedsensores = 4321;
-        int numcentros = 1;
-        int numsensors = 5;
+        int numcentros = 4;
+        int numsensors = 100;
 
         RedesBoard board = new RedesBoard(seedcentros,seedsensores, numcentros,numsensors );
         //System.out.println("Finished initializing");
@@ -53,7 +53,7 @@ public class Main {
                     System.out.println("ERROR, at least sensor "+ i +" is not connected!");
                     break;
                 }
-            System.out.println("All sensors are connected");
+            //System.out.println("All sensors are connected");
         }else {
             startTime = System.nanoTime();
             // Simmulated Annealing, 4 parameters: max iterations, iterations per temperature step
@@ -70,6 +70,10 @@ public class Main {
 
             // Instantiate the SearchAgent object
             agent = new SearchAgent(p, algSA);
+            RedesBoard finalRB  = (RedesBoard) algSA.getGoalState();
+            System.out.println (finalRB.computeTotalDistanceCost());
+            System.out.println (finalRB.computeTotalTransmitted());
+            System.out.println ("Total info of sensors: "+finalRB.getMaxInfo()+  " of maximum centers cap: "+numcentros*150);
         }
 
 	    // We print the results of the search

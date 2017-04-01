@@ -220,9 +220,10 @@ public class RedesBoard {
             if (!i.isSensor()){ //si es centro
                 double sumCent = 0;
                 ArrayList<Integer>sensorlist = incidentConnected.get(i);
-                System.out.println("Fors center "+i+" the capacity is");
+
+                //System.out.println("Fors center "+i+" the capacity is");
                 for (int j=0; j<sensorlist.size(); ++j){
-                    System.out.println (sensorlist.get(j)+" has a current cap of "+sensors[sensorlist.get(j)].getCurrentCap());
+                   // System.out.println (sensorlist.get(j)+" has a current cap of "+sensors[sensorlist.get(j)].getCurrentCap());
 
                     sumCent+= Math.min(sensors[sensorlist.get(j)].getCurrentCap(), sensors[sensorlist.get(j)].getCapacidad()*3);
                 }
@@ -329,7 +330,7 @@ public class RedesBoard {
             //Siempre podremos sacar informacion asi que actualizamos el volumen de informacion
 
             ArrayList<Integer> incidP2 = incidentConnected.get(p2);
-            System.out.println("About to remove arc from "+p1+" to "+p2 +" whose capacities are "+sensorm.getCurrentCap()+ ", "+sensors[p2.getID()].getCurrentCap());
+            //System.out.println("About to remove arc from "+p1+" to "+p2 +" whose capacities are "+sensorm.getCurrentCap()+ ", "+sensors[p2.getID()].getCurrentCap());
             capacityRecursive(p2, -Math.min(sensorm.getCurrentCap(), sensorm.getCapacidad()*3));
             ArrayList<Integer> l = incidentConnected.get(p2);
             for(int i = 0; i < l.size(); ++i){
@@ -397,7 +398,6 @@ public class RedesBoard {
     }
     public void lastRecurse (Pairintbool p, Pairintbool last){
 
-        // System.out.println("Assigning "+p.getID()+" last = "+ last.getID() + last.isSensor());
         sensors[p.getID()].setLast(last);
         if (incidentConnected.keySet().contains(p)){
             ArrayList<Integer> fills =incidentConnected.get(p);
