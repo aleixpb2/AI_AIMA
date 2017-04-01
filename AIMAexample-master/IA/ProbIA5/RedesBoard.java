@@ -3,7 +3,6 @@ package IA.ProbIA5;
 import IA.Red.Centro;
 import IA.Red.CentrosDatos;
 import IA.Red.Sensores;
-import aima.util.Pair;
 
 import java.util.*;
 
@@ -122,13 +121,11 @@ public class RedesBoard {
             newIncident.put(i,new ArrayList<Integer>(this.getIncidentConnected().get(i)));
         }
         SensorM[] newsensors = new SensorM[this.sensors.length];
-        for (int i=0; i<sensors.length;++i) newsensors[i] = sensors[i].clone();
+        for (int i=0; i<sensors.length;++i) newsensors[i] = sensors[i].myClone();
 
         RedesBoard newBoard = new RedesBoard(newConnexions,newIncident,newsensors,this.getCentros(),this.getDist_matrix());
         return newBoard;
     }
-
-
 
     private void generarConexionesInicial (){
         for(int i = 0; i < sensors.length; ++i) {
@@ -238,7 +235,6 @@ public class RedesBoard {
      * @return if the connection is possible
      */
     private boolean isPossibleAdd(int id2, Pairintbool p){
-
         if(p.isSensor()){
             //System.out.println("[IsPossibleAdd]"+sensors[id2].getLast().equals(sensors[p.getID()].getLast()));
             if(sensors[id2].getLast().equals(sensors[p.getID()].getLast())) {
@@ -252,7 +248,6 @@ public class RedesBoard {
             }
             else return true;
         }else{
-
             if (incidentConnected.keySet().contains(p)) {
                 ArrayList<Integer> l = incidentConnected.get(p);
                 return l.size() < 25;
@@ -358,11 +353,9 @@ public class RedesBoard {
             }
         }
         else {
-
             //System.out.println ("remove between "+p1+" "+p2+"fail");
             return false;
         }
-
     }
 
     public void capacityRecursive(Pairintbool p, double deltaCapacity){
@@ -390,11 +383,9 @@ public class RedesBoard {
                 capacityRecursive(connexions.get(p.getID()), deltaCapacity);
             }*/
         }
-
-
     }
-    public void lastRecurse (Pairintbool p, Pairintbool last){
 
+    public void lastRecurse (Pairintbool p, Pairintbool last){
         sensors[p.getID()].setLast(last);
         if (incidentConnected.keySet().contains(p)){
             ArrayList<Integer> fills =incidentConnected.get(p);
@@ -429,7 +420,6 @@ public class RedesBoard {
             }
             retVal+="\n";
         }
-
         return retVal;
     }
 

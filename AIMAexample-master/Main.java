@@ -50,7 +50,7 @@ public class Main {
             System.out.println("Duration: " + duration/1000000+" ms");
 
             System.out.println (finalB.computeTotalDistanceCost());
-            System.out.println (finalB.computeTotalTransmitted());
+            System.out.println ("Total info transmitted: " + finalB.computeTotalTransmitted());
             System.out.println ("Total info of sensors: " + finalB.getMaxInfo() + " of maximum centers cap: " + numcentros*150);
         }else {
             // Simmulated Annealing, 4 parameters: max iterations, iterations per temperature step
@@ -74,7 +74,7 @@ public class Main {
             System.out.println("Duration: " + duration/1000000+" ms");
 
             System.out.println (finalB.computeTotalDistanceCost());
-            System.out.println (finalB.computeTotalTransmitted());
+            System.out.println ("Total info transmitted: " + finalB.computeTotalTransmitted());
             System.out.println ("Total info of sensors: "+finalB.getMaxInfo()+  " of maximum centers cap: "+numcentros*150);
         }
 

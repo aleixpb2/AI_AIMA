@@ -1,5 +1,7 @@
 package IA.ProbIA5;
 
+import java.util.Objects;
+
 public class Pairintbool {
     private int ID;
     private boolean isSensor;
@@ -32,16 +34,22 @@ public class Pairintbool {
 
     @Override
     public int hashCode() {
-        return this.toString().hashCode();
+        //return this.toString().hashCode();
+        return Objects.hash(ID, isSensor); // hash code is computed by computing the hash codes for the relevant fields
+        // and combining them. Both is left to Objects' utility function hash.
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Pairintbool))
-            return false;
+    public final boolean equals(Object obj){
         if (obj == this)
             return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof Pairintbool))
+            return false;
         Pairintbool p = (Pairintbool) obj;
-        return ID == p.getID() && p.isSensor == isSensor;
+        //return ID == p.getID() && p.isSensor == isSensor;
+        return Objects.equals(ID, p.getID()) // Objects.equals checks if fields are null. Java 1.7 or more required.
+                && Objects.equals(isSensor, p.isSensor);
     }
 }
