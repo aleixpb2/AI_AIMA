@@ -147,19 +147,16 @@ public class RedesBoard {
     private void generarDistMatrix(){
         for (int i=0;i<sensors.length; ++i){
 
-
             dist_matrix.add(i,new ArrayList<IdDistSensor>());
             ArrayList<IdDistSensor> vecactual = dist_matrix.get(i);
             for (int j=0; j<sensors.length; ++j){
                 double dist = getDist(sensors[i].getCoordX(),sensors[j].getCoordX(),sensors[i].getCoordY(),sensors[j].getCoordY());
 
                 vecactual.add(j, new IdDistSensor(j,dist,true));
-
             }
             for (int k =0 ;k<centros.length; k++){
                 double dist = getDist(sensors[i].getCoordX(),centros[k].getCoordX(),sensors[i].getCoordY(),centros[k].getCoordY());
                 vecactual.add(k+sensors.length, new IdDistSensor(k,dist,false));
-
             }
 
             Collections.sort(dist_matrix.get(i), new Comparator<IdDistSensor>() {

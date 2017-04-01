@@ -27,7 +27,6 @@ public class RedesSuccesorFunction implements SuccessorFunction{
                 //System.out.println ("NEW ITERATION!!!!! Initial board is-------------");
                 //System.out.println(newBoard.getIncidentConnected());
 
-
                 Pairintbool p3 = new Pairintbool(j, true);
                 SensorM[] currentsensorsArray  = newBoard.getSensors();
 

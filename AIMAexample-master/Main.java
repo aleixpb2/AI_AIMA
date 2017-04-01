@@ -36,26 +36,23 @@ public class Main {
         boolean HC = str.equals("y");
         final long startTime;
         SearchAgent agent;
+        RedesBoard finalB;
         if(HC) {// Hill Climbing, no parameters
-            startTime = System.nanoTime();
             Search algHC = new HillClimbingSearch();
-
             // Instantiate the SearchAgent object
+            System.out.println("Before SearchAgent"); // TODO: remove
+            startTime = System.nanoTime();
             agent = new SearchAgent(p, algHC);
-            RedesBoard finalB = (RedesBoard) algHC.getGoalState();
+            System.out.println("After SearchAgent"); // TODO: remove
+            finalB = (RedesBoard) algHC.getGoalState();
+
+            final long duration = System.nanoTime() - startTime;
+            System.out.println("Duration: " + duration/1000000+" ms");
+
             System.out.println (finalB.computeTotalDistanceCost());
             System.out.println (finalB.computeTotalTransmitted());
             System.out.println ("Total info of sensors: " + finalB.getMaxInfo() + " of maximum centers cap: " + numcentros*150);
-            //System.out.print("Sensors in tree: " + finalB.sensorsInTree());
-            ArrayList<Integer> list = finalB.sensorsInTree();
-            for(int i = 0; i < list.size(); ++i)
-                if(list.get(i) == 0){
-                    System.out.println("ERROR, at least sensor "+ i +" is not connected!");
-                    break;
-                }
-            //System.out.println("All sensors are connected");
         }else {
-            startTime = System.nanoTime();
             // Simmulated Annealing, 4 parameters: max iterations, iterations per temperature step
             // and temperature function parameters k and lambda
             System.out.println("Maximum iterations:");
@@ -69,33 +66,40 @@ public class Main {
             Search algSA = new SimulatedAnnealingSearch(maxIter, itStep, k, lambda);
 
             // Instantiate the SearchAgent object
+            startTime = System.nanoTime();
             agent = new SearchAgent(p, algSA);
-            RedesBoard finalRB  = (RedesBoard) algSA.getGoalState();
-            System.out.println (finalRB.computeTotalDistanceCost());
-            System.out.println (finalRB.computeTotalTransmitted());
-            System.out.println ("Total info of sensors: "+finalRB.getMaxInfo()+  " of maximum centers cap: "+numcentros*150);
+            finalB  = (RedesBoard) algSA.getGoalState();
+
+            final long duration = System.nanoTime() - startTime;
+            System.out.println("Duration: " + duration/1000000+" ms");
+
+            System.out.println (finalB.computeTotalDistanceCost());
+            System.out.println (finalB.computeTotalTransmitted());
+            System.out.println ("Total info of sensors: "+finalB.getMaxInfo()+  " of maximum centers cap: "+numcentros*150);
         }
 
 	    // We print the results of the search
-        System.out.println();
+        System.out.println("Results: actions and instrumentation");
         printActions(agent.getActions());
         printInstrumentation(agent.getInstrumentation());
 
-
-        final long duration = System.nanoTime() - startTime;
-        System.out.println(duration/1000000+" ms");
-
+        // TODO: remove DEBUG print for efficiency
+        ArrayList<Integer> list = finalB.sensorsInTree();
+        for(int i = 0; i < list.size(); ++i)
+            if(list.get(i) == 0){
+                System.out.println("ERROR, at least sensor "+ i +" is not connected!");
+                break;
+            }
+        System.out.println("All sensors are connected");
     }
 
         private static void printInstrumentation(Properties properties) {
-
         Iterator keys = properties.keySet().iterator();
         while (keys.hasNext()) {
             String key = (String) keys.next();
             String property = properties.getProperty(key);
             System.out.println(key + " : " + property);
         }
-        
     }
     
     private static void printActions(List actions) {
@@ -104,5 +108,4 @@ public class Main {
             System.out.println(action);
         }
     }
-
 }

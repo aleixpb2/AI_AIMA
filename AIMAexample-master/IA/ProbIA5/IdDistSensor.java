@@ -1,11 +1,9 @@
 package IA.ProbIA5;
 
-/**
- * Created by laiafreixas on 8/03/17.
- */
 public class IdDistSensor {
     private int ID;
     private double dist;
+    private boolean isSensor;
 
     public IdDistSensor(int ID, double dist, boolean isSensor) {
         this.ID = ID;
@@ -36,6 +34,4 @@ public class IdDistSensor {
     public void setSensor(boolean sensor) {
         isSensor = sensor;
     }
-
-    private boolean isSensor;
 }
