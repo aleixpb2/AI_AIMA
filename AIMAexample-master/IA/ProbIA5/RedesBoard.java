@@ -369,23 +369,30 @@ public class RedesBoard {
 
     public void capacityRecursive(Pairintbool p, double deltaCapacity){
         if(p.isSensor())  {
-            sensors[p.getID()].setCurrentCap(deltaCapacity + sensors[p.getID()].getCurrentCap());
 
-            /*TODO Check if fine.
-            Dan's Shitty Patches, Cap edition: Posa-hi com a minim la capacitat del sensor encara que ho restis tot.
-             */
-            if (sensors[p.getID()].getCurrentCap() <= sensors[p.getID()].getCapacidad()){
-                //sensors[p.getID()].setCurrentCap(sensors[p.getID()].getCapacidad());
-                System.out.println("CurrentCap too low!!!");
+            double p_capacity_before = sensors[p.getID()].getCurrentCap();
+            double p_capacidad = sensors[p.getID()].getCapacidad();
+            //We always update the current sensor with the capacity that arrives.
+            sensors[p.getID()].setCurrentCap(deltaCapacity + p_capacity_before);
+
+            double sent_before = Math.min (p_capacity_before,3*p_capacidad);
+            double sent_now = Math.min(sensors[p.getID()].getCurrentCap(),3*p_capacidad);
+
+            double difference = sent_now - sent_before;
+            if (difference!=0) {
+                if (connexions.containsKey(p.getID())) {
+                    capacityRecursive(connexions.get(p.getID()), difference);
+                }
             }
+                if (sensors[p.getID()].getCurrentCap()<=0){
+                System.out.println (p+" reacheddd negative when deleting "+deltaCapacity);
+               }
             /*
-            if (sensors[p.getID()].getCurrentCap()<=0){
-                System.out.println (p+" reached negative when deleting "+deltaCapacity);
-            }
-            */
-            if(connexions.containsKey(p.getID()))
+            if(connexions.containsKey(p.getID())){
                 capacityRecursive(connexions.get(p.getID()), deltaCapacity);
+            }*/
         }
+
 
     }
     public void lastRecurse (Pairintbool p, Pairintbool last){
