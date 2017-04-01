@@ -42,8 +42,38 @@ public class RedesBoard {
         }
 
         //triar quina de les dos
-        //generarConexionesRandom();
-        generarConexionesInicial();
+        generarConexionesRandomToCenters();
+        //generarConexionesInicial();
+    }
+    private void generarConexionesRandomToCenters (){
+
+
+        Random myRandom=new Random();
+        int j;
+        int maxIter = sensors.length;
+        for (int i=0; i<sensors.length; ++i) {
+            Pairintbool currentsensor = new Pairintbool(i,true);
+
+            int aux = 0;
+            do {
+                j = myRandom.nextInt(centros.length);
+                aux ++;
+            } while (aux<maxIter && !createArc(currentsensor, new Pairintbool(j, false)) );
+
+
+            if (aux>=maxIter) {
+                System.out.println ("Initial connection has sensor-sensor connection");
+
+                do {
+                    j = myRandom.nextInt(sensors.length);
+
+                }while (!createArc(currentsensor, new Pairintbool(j, true)));
+
+
+
+            }
+        }
+
     }
 
     private void generarConexionesRandom (){
@@ -69,7 +99,7 @@ public class RedesBoard {
                 do {
                     sensor = false;
                     j = myRandom.nextInt(centros.length);
-                    aux ++;
+
                 } while (!createArc(currentsensor, new Pairintbool(j, sensor)) );
             }
         }
@@ -210,7 +240,7 @@ public class RedesBoard {
      */
     public double computeTotalTransmitted(){
         double transm = 0;
-        for (Pairintbool i: incidentConnected.keySet()){
+        for (IA.ProbIA5.Pairintbool i: incidentConnected.keySet()){
             if (!i.isSensor()){ //si es centro
                 double sumCent = 0;
                 ArrayList<Integer>sensorlist = incidentConnected.get(i);
