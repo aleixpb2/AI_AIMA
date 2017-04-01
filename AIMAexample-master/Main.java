@@ -34,24 +34,19 @@ public class Main {
         Scanner sc =new Scanner(System.in);
         String str=sc.next();
         boolean HC = str.equals("y");
-        final long startTime;
+        final long startTime, duration;
+        long sec;
         SearchAgent agent;
         RedesBoard finalB;
         if(HC) {// Hill Climbing, no parameters
             Search algHC = new HillClimbingSearch();
+
             // Instantiate the SearchAgent object
             System.out.println("Before SearchAgent"); // TODO: remove
             startTime = System.nanoTime();
             agent = new SearchAgent(p, algHC);
             System.out.println("After SearchAgent"); // TODO: remove
             finalB = (RedesBoard) algHC.getGoalState();
-
-            final long duration = System.nanoTime() - startTime;
-            System.out.println("Duration: " + duration/1000000+" ms");
-
-            System.out.println (finalB.computeTotalDistanceCost());
-            System.out.println ("Total info transmitted: " + finalB.computeTotalTransmitted());
-            System.out.println ("Total info of sensors: " + finalB.getMaxInfo() + " of maximum centers cap: " + numcentros*150);
         }else {
             // Simmulated Annealing, 4 parameters: max iterations, iterations per temperature step
             // and temperature function parameters k and lambda
@@ -69,14 +64,15 @@ public class Main {
             startTime = System.nanoTime();
             agent = new SearchAgent(p, algSA);
             finalB  = (RedesBoard) algSA.getGoalState();
-
-            final long duration = System.nanoTime() - startTime;
-            System.out.println("Duration: " + duration/1000000+" ms");
-
-            System.out.println (finalB.computeTotalDistanceCost());
-            System.out.println ("Total info transmitted: " + finalB.computeTotalTransmitted());
-            System.out.println ("Total info of sensors: "+finalB.getMaxInfo()+  " of maximum centers cap: "+numcentros*150);
         }
+
+        duration = System.nanoTime() - startTime;
+        sec = duration/1000000000;
+        System.out.println("Duration: " + sec +"s, which are " + sec/60.0 + " min");
+
+        System.out.println (finalB.computeTotalDistanceCost());
+        System.out.println ("Total info transmitted: " + finalB.computeTotalTransmitted());
+        System.out.println ("Total info of sensors: "+finalB.getMaxInfo()+  " of maximum centers cap: "+numcentros*150);
 
 	    // We print the results of the search
         System.out.println("Results: actions and instrumentation");
