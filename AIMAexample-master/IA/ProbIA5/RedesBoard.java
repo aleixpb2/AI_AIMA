@@ -272,13 +272,13 @@ public class RedesBoard {
                 return false;
             }
 
-            if (incidentConnected.keySet().contains(p)) {
+            if (incidentConnected.containsKey(p)) {
                 ArrayList<Integer> l = incidentConnected.get(p);
                 return l.size() < 3;
             }
             else return true;
         }else{
-            if (incidentConnected.keySet().contains(p)) {
+            if (incidentConnected.containsKey(p)) {
                 ArrayList<Integer> l = incidentConnected.get(p);
                 return l.size() < 25;
             }
@@ -417,7 +417,7 @@ public class RedesBoard {
 
     public void lastRecurse (Pairintbool p, Pairintbool last){
         sensors[p.getID()].setLast(last);
-        if (incidentConnected.keySet().contains(p)){
+        if (incidentConnected.containsKey(p)){
             ArrayList<Integer> fills =incidentConnected.get(p);
             for (int i=0; i<fills.size(); ++i){
                 lastRecurse(new Pairintbool(fills.get(i),true),last);
