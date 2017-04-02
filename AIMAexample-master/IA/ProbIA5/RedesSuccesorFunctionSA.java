@@ -13,7 +13,7 @@ public class RedesSuccesorFunctionSA implements SuccessorFunction{
     public List getSuccessors(Object state) {
         RedesBoard rb = (RedesBoard) state;
         ArrayList l = new ArrayList();
-        RedesHeuristicFunction redesHF  = new RedesHeuristicFunction();
+        //RedesHeuristicFunction redesHF  = new RedesHeuristicFunction();
         HashMap<Integer,Pairintbool> connexions = rb.getConnexions();
 
         Random myRandom=new Random();
@@ -32,8 +32,8 @@ public class RedesSuccesorFunctionSA implements SuccessorFunction{
             }
         } while (!newBoard.changeArc(p1, p2, new Pairintbool(j, sensor)));
 
-        double v = redesHF.getHeuristicValue(newBoard);
-        String S = RedesBoard.SWAP + " " + i + " " + j + " sensor. Cost(" + v + ") ---> \n" + newBoard.toString();
+        //double v = redesHF.getHeuristicValue(newBoard);
+        String S = RedesBoard.SWAP + " " + i + " " + j + " sensor.\n";
         l.add(new Successor(S, newBoard));
         return l;
     }
