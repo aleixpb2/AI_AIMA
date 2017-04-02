@@ -51,7 +51,7 @@ public class RedesBoard {
     private void generarConexionesRandomToCenters (){
         Random myRandom=new Random();
         int j;
-        int maxIter = sensors.length;
+        int maxIter = Math.max(sensors.length,centros.length) ;
         for (int i=0; i<sensors.length; ++i) {
             Pairintbool currentsensor = new Pairintbool(i,true);
 
@@ -67,7 +67,6 @@ public class RedesBoard {
 
                 do {
                     j = myRandom.nextInt(sensors.length);
-
                 }while (!createArc(currentsensor, new Pairintbool(j, true)));
             }
         }
@@ -468,7 +467,7 @@ public class RedesBoard {
             sum += sensors[i].getCapacidad();
         return sum;
     }
-
+/*
     public ArrayList<Integer> sensorsInTree(){ // returns a set with the sensor IDs connected to a center
         ArrayList<Integer> visited = new ArrayList<Integer>();
         for(int i = 0; i < nSensors();++i)
@@ -480,7 +479,7 @@ public class RedesBoard {
         }
         if(!s.empty())sensorsInTreeRec(s, visited, s.pop());
         return visited;
-    }
+    }*/
     private void sensorsInTreeRec(Stack<Integer> s,ArrayList<Integer> visited, int act){
         visited.set(act, 1);
         ArrayList<Integer> list = incidentConnected.get(new Pairintbool(act, true));
