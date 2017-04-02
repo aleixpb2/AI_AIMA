@@ -489,4 +489,13 @@ public class RedesBoard {
         }
         if(!s.empty()) sensorsInTreeRec(s, visited, s.pop());
     }
+
+    public ArrayList<Integer> centersNotUsed(){ // list with IDs of unused centers
+        ArrayList<Integer> ret = new ArrayList<>();
+        for(int i = 0; i < nCentros(); ++i){
+            Pairintbool p = new Pairintbool(i, false); // centro i
+            if(!incidentConnected.containsKey(p)) ret.add(i);
+        }
+        return ret;
+    }
 }
