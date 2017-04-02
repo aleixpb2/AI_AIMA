@@ -42,9 +42,10 @@ public class RedesBoard {
             generarDistMatrix();
         }
 
-        //triar quina de les dos
-        generarConexionesRandomToCenters();
+        //triar quina de les tres
+        //generarConexionesRandomToCenters();
         //generarConexionesInicial();
+        generarConexionesRandom ();
     }
     private void generarConexionesRandomToCenters (){
         Random myRandom=new Random();
@@ -358,7 +359,7 @@ public class RedesBoard {
             if (p2.isSensor())
                 dist = getDist(sensorm.getCoordX(),sensors[p2.getID()].getCoordX(), sensorm.getCoordY(), sensors[p2.getID()].getCoordY());
             else
-                dist = getDist(sensorm.getCoordX(),sensors[p2.getID()].getCoordX(), sensorm.getCoordY(), sensors[p2.getID()].getCoordY());
+                dist = getDist(sensorm.getCoordX(),centros[p2.getID()].getCoordX(), sensorm.getCoordY(), centros[p2.getID()].getCoordY());
             totalCost = totalCost - dist*dist*sensorm.getCurrentCap();
             return true;
         }else {
