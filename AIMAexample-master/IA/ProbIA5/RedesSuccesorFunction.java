@@ -27,7 +27,7 @@ public class RedesSuccesorFunction implements SuccessorFunction{
                 if (!p1.equals(p3)){
                     if (newBoard.changeArc(p1, p2, p3)) {
                         //double v = redesHF.getHeuristicValue(newBoard);
-                        String S = RedesBoard.SWAP + " " + i + " " + j + " sensor.\n";
+                        String S = RedesBoard.SWAP + " " + i + " " + j + " sensor.";
                         l.add(new Successor(S, newBoard));
                     } else {
                         Random myRandom = new Random();
@@ -48,7 +48,7 @@ public class RedesSuccesorFunction implements SuccessorFunction{
                 RedesBoard newBoard = rb.copy();
                 if(newBoard.changeArc(p1, p2, new Pairintbool(j, false))) {
                     //double v = redesHF.getHeuristicValue(newBoard);
-                    String S = RedesBoard.SWAP + " " + i + " " + j + " centro.\n";
+                    String S = RedesBoard.SWAP + " " + i + " " + j + " centro.";
                     l.add(new Successor(S, newBoard));
                 }
             }
