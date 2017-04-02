@@ -344,7 +344,6 @@ public class RedesBoard {
             SensorM sensorm = sensors[p1.getID()];
             //Siempre podremos sacar informacion asi que actualizamos el volumen de informacion
 
-            ArrayList<Integer> incidP2 = incidentConnected.get(p2);
             //System.out.println("About to remove arc from "+p1+" to "+p2 +" whose capacities are "+sensorm.getCurrentCap()+ ", "+sensors[p2.getID()].getCurrentCap());
             capacityRecursive(p2, -Math.min(sensorm.getCurrentCap(), sensorm.getCapacidad()*3));
             ArrayList<Integer> l = incidentConnected.get(p2);
@@ -480,6 +479,7 @@ public class RedesBoard {
         if(!s.empty())sensorsInTreeRec(s, visited, s.pop());
         return visited;
     }*/
+    /*
     private void sensorsInTreeRec(Stack<Integer> s,ArrayList<Integer> visited, int act){
         visited.set(act, 1);
         ArrayList<Integer> list = incidentConnected.get(new Pairintbool(act, true));
@@ -487,13 +487,14 @@ public class RedesBoard {
             for(int j = 0; j < list.size(); ++j) s.push(list.get(j));
         }
         if(!s.empty()) sensorsInTreeRec(s, visited, s.pop());
-    }
+    }*/
 
     public ArrayList<Integer> centersNotUsed(){ // list with IDs of unused centers
         ArrayList<Integer> ret = new ArrayList<>();
         for(int i = 0; i < nCentros(); ++i){
             Pairintbool p = new Pairintbool(i, false); // centro i
-            if(!incidentConnected.containsKey(p)) ret.add(i);
+            if(!incidentConnected.containsKey(p) || incidentConnected.get(p) == null || incidentConnected.get(p).size() == 0) ret.add(i); // not appears in map or appers with no incidents
+            //System.out.println("Incidents of "+i+": "+incidentConnected.get(p));
         }
         return ret;
     }

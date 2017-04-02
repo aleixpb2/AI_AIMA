@@ -14,7 +14,7 @@ public class Main {
         int seedcentros = 1234;
         int seedsensores = 4321;
         int numcentros = 4;
-        int numsensors = 100;
+        int numsensors = 4;
 
         RedesBoard board = new RedesBoard(seedcentros,seedsensores, numcentros,numsensors );
         //System.out.println("Finished initializing");
@@ -82,14 +82,16 @@ public class Main {
         printActions(agent.getActions());
         printInstrumentation(agent.getInstrumentation());
 
-        // TODO: remove DEBUG print for efficiency
-        ArrayList<Integer> list = finalB.sensorsInTree();
+        /*ArrayList<Integer> list = finalB.sensorsInTree();
         for(int i = 0; i < list.size(); ++i)
             if(list.get(i) == 0){
                 System.out.println("ERROR, at least sensor "+ i +" is not connected!");
                 break;
             }
-        System.out.println("All sensors are connected");
+        System.out.println("All sensors are connected");*/
+
+        ArrayList<Integer> listCent = finalB.centersNotUsed();
+        System.out.println("Center IDs not used: " + listCent);
     }
 
         private static void printInstrumentation(Properties properties) {
