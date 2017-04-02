@@ -22,8 +22,9 @@ public class RedesSuccesorFunctionSA implements SuccessorFunction{
         Pairintbool p1 = new Pairintbool(i, true);
         Pairintbool p2 = connexions.get(i);
         RedesBoard newBoard = rb.copy();
-        boolean sensor = true;
+        boolean sensor;
         do{
+            sensor = true;
             j=myRandom.nextInt(rb.nSensors() + rb.nCentros());
             if(j >= rb.nSensors()){
                 j -= rb.nSensors();
