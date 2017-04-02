@@ -13,8 +13,8 @@ public class Main {
 
         int seedcentros = 1234;
         int seedsensores = 4321;
-        int numcentros = 4;
-        int numsensors = 100;
+        int numcentros = 1;
+        int numsensors = 5;
 
         RedesBoard board = new RedesBoard(seedcentros,seedsensores, numcentros,numsensors );
         //System.out.println("Finished initializing");

@@ -47,8 +47,6 @@ public class RedesBoard {
         //generarConexionesInicial();
     }
     private void generarConexionesRandomToCenters (){
-
-
         Random myRandom=new Random();
         int j;
         int maxIter = sensors.length;
@@ -69,16 +67,11 @@ public class RedesBoard {
                     j = myRandom.nextInt(sensors.length);
 
                 }while (!createArc(currentsensor, new Pairintbool(j, true)));
-
-
-
             }
         }
-
     }
 
     private void generarConexionesRandom (){
-
         Random myRandom=new Random();
         int j;
         int maxIter = sensors.length;
@@ -105,6 +98,7 @@ public class RedesBoard {
             }
         }
     }
+
     private RedesBoard (double cost, HashMap<Integer,Pairintbool>  connex,  HashMap<Pairintbool, ArrayList<Integer>>incidentConnec,SensorM[] sensorlist,Centro[] centroslist,ArrayList<ArrayList<IdDistSensor> > dist_matr){
         totalCost = cost;
         connexions = connex;
@@ -321,21 +315,18 @@ public class RedesBoard {
                 l.add(p1.getID());
                 incidentConnected.put(p2,l);
             }
+            double dist;
             if (p2.isSensor()) {
                 //if it's a sensor, we have to check the last element
                 lastRecurse(p1, sensors[p2.getID()].getLast());
-                double dist =getDist(sensors[p1.getID()].getCoordX(),sensors[p2.getID()].getCoordX(), sensors[p1.getID()].getCoordY(), sensors[p2.getID()].getCoordY());
-
-                totalCost = totalCost + dist*dist*sensorm.getCurrentCap();
+                dist =getDist(sensorm.getCoordX(),sensors[p2.getID()].getCoordX(), sensorm.getCoordY(), sensors[p2.getID()].getCoordY());
             }
-            else {
+            else{
                 //if it's a center the last element is itself - always.
-                double dist =getDist(sensors[p1.getID()].getCoordX(),centros[p2.getID()].getCoordX(), sensors[p1.getID()].getCoordY(), centros[p2.getID()].getCoordY());
-
-                totalCost = totalCost + dist*dist*sensorm.getCurrentCap();
-
                 lastRecurse(p1,p2);
+                dist =getDist(sensorm.getCoordX(),centros[p2.getID()].getCoordX(), sensorm.getCoordY(), centros[p2.getID()].getCoordY());
             }
+            totalCost = totalCost + dist*dist*sensorm.getCurrentCap();
             //System.out.println ("Successfully created arc between "+p1.getID()+" "+p1.isSensor()+" and "+p2.getID()+" "+p2.isSensor());
             return true;
         } else {
@@ -363,19 +354,12 @@ public class RedesBoard {
                 }
             }
             lastRecurse(p1,p1);
-            if (p2.isSensor()){
-
-                double dist =getDist(sensors[p1.getID()].getCoordX(),sensors[p2.getID()].getCoordX(), sensors[p1.getID()].getCoordY(), sensors[p2.getID()].getCoordY());
-
-                totalCost = totalCost - dist*dist*sensorm.getCurrentCap();
-
-            }
-            else {
-
-                double dist =getDist(sensors[p1.getID()].getCoordX(),sensors[p2.getID()].getCoordX(), sensors[p1.getID()].getCoordY(), sensors[p2.getID()].getCoordY());
-
-                totalCost = totalCost - dist*dist*sensorm.getCurrentCap();
-            }
+            double dist;
+            if (p2.isSensor())
+                dist = getDist(sensorm.getCoordX(),sensors[p2.getID()].getCoordX(), sensorm.getCoordY(), sensors[p2.getID()].getCoordY());
+            else
+                dist = getDist(sensorm.getCoordX(),sensors[p2.getID()].getCoordX(), sensorm.getCoordY(), sensors[p2.getID()].getCoordY());
+            totalCost = totalCost - dist*dist*sensorm.getCurrentCap();
             return true;
         }else {
             // p1 has no connections or is not connected to p2
