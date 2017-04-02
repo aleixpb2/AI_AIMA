@@ -16,12 +16,13 @@ public class RedesBoard {
     private static Centro [] centros;
     private HashMap<Integer,Pairintbool>  connexions; // First: idSensor, Second: sensor or center to which is conencted (id + bool)
     private HashMap<Pairintbool, ArrayList<Integer>>  incidentConnected; // Key: First -> id Second -> isSensor/center Value: list of sensor ids connected to the key
-
+    private double totalCost;
     private ArrayList<ArrayList<IdDistSensor> > dist_matrix = null;
     //TODO GENERATE GETTERS AND SETTERS FOR OTHER FUNCTIONS : WHICH DO WE NEED?
     /* Constructor */
 
     public RedesBoard(int seedcentros, int seedsensores, int ncent, int nsens) {
+        totalCost=0;
         CentrosDatos cd = new CentrosDatos(ncent,seedcentros);
         Sensores sensores = new Sensores(nsens,seedsensores);
         centros = new Centro[cd.size()];
@@ -104,7 +105,8 @@ public class RedesBoard {
             }
         }
     }
-    private RedesBoard (HashMap<Integer,Pairintbool>  connex,  HashMap<Pairintbool, ArrayList<Integer>>incidentConnec,SensorM[] sensorlist,Centro[] centroslist,ArrayList<ArrayList<IdDistSensor> > dist_matr){
+    private RedesBoard (double cost, HashMap<Integer,Pairintbool>  connex,  HashMap<Pairintbool, ArrayList<Integer>>incidentConnec,SensorM[] sensorlist,Centro[] centroslist,ArrayList<ArrayList<IdDistSensor> > dist_matr){
+        totalCost = cost;
         connexions = connex;
         incidentConnected = incidentConnec;
         sensors = sensorlist;
@@ -153,7 +155,7 @@ public class RedesBoard {
         SensorM[] newsensors = new SensorM[this.sensors.length];
         for (int i=0; i<sensors.length;++i) newsensors[i] = sensors[i].myClone();
 
-        RedesBoard newBoard = new RedesBoard(newConnexions,newIncident,newsensors,this.getCentros(),this.getDist_matrix());
+        RedesBoard newBoard = new RedesBoard(new Double(totalCost), newConnexions,newIncident,newsensors,this.getCentros(),this.getDist_matrix());
         return newBoard;
     }
 
@@ -173,7 +175,6 @@ public class RedesBoard {
     }
     private void generarDistMatrix(){
         for (int i=0;i<sensors.length; ++i){
-
             dist_matrix.add(i,new ArrayList<IdDistSensor>());
             ArrayList<IdDistSensor> vecactual = dist_matrix.get(i);
             for (int j=0; j<sensors.length; ++j){
@@ -204,6 +205,7 @@ public class RedesBoard {
     public PairCosts computeTotalDistanceCost (){
         double cost_sum = 0;
         double distance_sum = 0;
+        /*
         for (Pairintbool i : incidentConnected.keySet()){
             int x1, y1, x2, y2;
             if (i.isSensor()){
@@ -221,7 +223,8 @@ public class RedesBoard {
                 cost_sum += dist*dist*sensors[sensorlist.get(j)].getCurrentCap();
                 distance_sum += dist;
             }
-        }
+        }*/
+        cost_sum = totalCost;
         return new PairCosts(cost_sum,distance_sum);
     }
 
@@ -321,9 +324,16 @@ public class RedesBoard {
             if (p2.isSensor()) {
                 //if it's a sensor, we have to check the last element
                 lastRecurse(p1, sensors[p2.getID()].getLast());
+                double dist =getDist(sensors[p1.getID()].getCoordX(),sensors[p2.getID()].getCoordX(), sensors[p1.getID()].getCoordY(), sensors[p2.getID()].getCoordY());
+
+                totalCost = totalCost + dist*dist*sensorm.getCurrentCap();
             }
             else {
                 //if it's a center the last element is itself - always.
+                double dist =getDist(sensors[p1.getID()].getCoordX(),centros[p2.getID()].getCoordX(), sensors[p1.getID()].getCoordY(), centros[p2.getID()].getCoordY());
+
+                totalCost = totalCost + dist*dist*sensorm.getCurrentCap();
+
                 lastRecurse(p1,p2);
             }
             //System.out.println ("Successfully created arc between "+p1.getID()+" "+p1.isSensor()+" and "+p2.getID()+" "+p2.isSensor());
@@ -353,7 +363,19 @@ public class RedesBoard {
                 }
             }
             lastRecurse(p1,p1);
+            if (p2.isSensor()){
 
+                double dist =getDist(sensors[p1.getID()].getCoordX(),sensors[p2.getID()].getCoordX(), sensors[p1.getID()].getCoordY(), sensors[p2.getID()].getCoordY());
+
+                totalCost = totalCost - dist*dist*sensorm.getCurrentCap();
+
+            }
+            else {
+
+                double dist =getDist(sensors[p1.getID()].getCoordX(),sensors[p2.getID()].getCoordX(), sensors[p1.getID()].getCoordY(), sensors[p2.getID()].getCoordY());
+
+                totalCost = totalCost - dist*dist*sensorm.getCurrentCap();
+            }
             return true;
         }else {
             // p1 has no connections or is not connected to p2
@@ -399,10 +421,24 @@ public class RedesBoard {
                 if (sensors[p.getID()].getCurrentCap()<=0){
                 System.out.println (p+" reacheddd negative when deleting "+deltaCapacity);
                }
-            /*
+
             if(connexions.containsKey(p.getID())){
+                //actualitzar totalCost
+                Pairintbool nextElement = connexions.get(p.getID());
+                double dist = 0;
+                if (nextElement.isSensor()) {
+                    dist = getDist(sensors[p.getID()].getCoordX(), sensors[nextElement.getID()].getCoordX(), sensors[p.getID()].getCoordY(), sensors[nextElement.getID()].getCoordY());
+                }
+                else {
+                    dist = getDist(sensors[p.getID()].getCoordX(), centros[nextElement.getID()].
+                            getCoordX(), sensors[p.getID()].getCoordY(), centros[nextElement.getID()].getCoordY());
+                }
+                totalCost = totalCost - dist*dist*p_capacity_before;
+                totalCost = totalCost + dist*dist*sensors[p.getID()].getCurrentCap();
+                // total cost actualitzat
+
                 capacityRecursive(connexions.get(p.getID()), deltaCapacity);
-            }*/
+            }
         }
     }
 

@@ -28,7 +28,6 @@ public class RedesSuccesorFunction implements SuccessorFunction{
                 //System.out.println(newBoard.getIncidentConnected());
 
                 Pairintbool p3 = new Pairintbool(j, true);
-                SensorM[] currentsensorsArray  = newBoard.getSensors();
 
                 if (!p1.equals(p3)){
                     if (newBoard.changeArc(p1, p2, p3)) {
@@ -39,15 +38,7 @@ public class RedesSuccesorFunction implements SuccessorFunction{
                         String S = RedesBoard.SWAP + " " + i + " " + j + " sensor. Cost(" + v + ") ---> \n" + newBoard.toString();
                         l.add(new Successor(S, newBoard));
                     } else {
-                        /*System.out.println("ELSE:");
-                        System.out.println("Tried to create : " + newBoard.createArc(p1, p3));
-                        System.out.println("Tried to disconnect p1 and p2 : " + newBoard.removeArc(p1, p2));
 
-                        if (!newBoard.createArc(p1, p3) && !newBoard.removeArc(p1, p2)) {
-                            System.out.println("           IMPOSSIBLE TO DISCONNECT!!! BOARD STATE IS");
-                            System.out.println(newBoard.toString());
-
-                        }*/
                         Random myRandom = new Random();
                         int rand1;
 
@@ -59,29 +50,7 @@ public class RedesSuccesorFunction implements SuccessorFunction{
                             newBoard.changeArc(p1,p2,p3);
                             newBoard.createArc(selectedRemove,p2);
                         }
-                        /*
-                        System.out.println("incidents in p3 are " + incidP3);
-                        System.out.println(p1);
-                        System.out.println(p2);
-                        System.out.println(p3);
-                        System.out.println();*/
 
-
-
-                    /*
-                    System.out.println (p3);
-
-
-                    newBoard.removeArc(p1,p2);
-                    ArrayList<Integer> incidP3 = incidents.get(p3);
-                    System.out.println (incidP3);
-                    Random myRandom=new Random();
-                    int rand;
-                    rand=myRandom.nextInt(incidP3.size());
-
-                    newBoard.removeArc(new Pairintbool(incidP3.get(rand),true),p3);
-                    newBoard.createArc(p1,p3);
-                */
 
                     }
                 }

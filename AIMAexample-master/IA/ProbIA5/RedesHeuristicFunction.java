@@ -13,11 +13,10 @@ public class RedesHeuristicFunction implements HeuristicFunction {
         RedesBoard board=(RedesBoard)state;
 
 
-        //RANGE total transmitted € (0, 5*numSensors)
-        //RANGE total distance € (1, 25*diagonal * numCentros)
-        int factor = 100;
+        int factor = 2000;
         PairCosts a = board.computeTotalDistanceCost();
         double total_transmitted =  board.computeTotalTransmitted();
+        System.out.println ("Total cost = "+ a.getFirst());
         //System.out.println ("Cost = "+a.getFirst()+ "-- Distance = "+a.getSecond()+"--Total Transmited = "+total_transmitted);
         return ((a.getFirst()) - factor *total_transmitted);
         //return computeTotalDistanceCost(); // minimizar
