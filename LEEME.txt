@@ -1,0 +1,20 @@
+Para ejecutar la práctica :
+
+1) OPCION 1 - Desde InteliJ
+	- Abrir la práctica
+	- Seleccionar la clase Main.java
+	- Ejecutar esa clase
+2) OPCION 2 - Desde linea de comandas
+	- Ir al directorio AI_AIMA/Executable
+	- Ejecutar la siguiente linea
+java -jar AIMASensorsCenters.jar
+
+
+
+Para decidir si Hill Climbing o Simulated Annealing, escribir 'y' o 'n' a la pregunta
+Para Simulated Annealing, entrar los parámetros en el orden que los pide, nuestra recomendación es:
+
+Iterations = 10.000
+Iterations by temperature step = 1000
+k = 25
+lambda = 0.001
