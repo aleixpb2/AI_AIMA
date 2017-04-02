@@ -1,7 +1,4 @@
-import IA.ProbIA5.RedesBoard;
-import IA.ProbIA5.RedesGoalTest;
-import IA.ProbIA5.RedesHeuristicFunction;
-import IA.ProbIA5.RedesSuccesorFunction;
+import IA.ProbIA5.*;
 import aima.search.framework.Problem;
 import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
@@ -28,6 +25,12 @@ public class Main {
                                 new RedesGoalTest(),
                                 new RedesHeuristicFunction());
 
+
+        //This problem object has to be created for the simulated annealing.
+        Problem p2 = new  Problem(board,
+                new RedesSuccesorFunctionSA(),
+                new RedesGoalTest(),
+                new RedesHeuristicFunction());
         // Instantiate the search algorithm
 
         System.out.println("Do you want to execute Hill Climbing? y/n");
@@ -62,7 +65,7 @@ public class Main {
 
             // Instantiate the SearchAgent object
             startTime = System.nanoTime();
-            agent = new SearchAgent(p, algSA);
+            agent = new SearchAgent(p2, algSA);
             finalB  = (RedesBoard) algSA.getGoalState();
         }
 
