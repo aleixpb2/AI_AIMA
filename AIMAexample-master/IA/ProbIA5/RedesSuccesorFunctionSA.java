@@ -33,7 +33,9 @@ public class RedesSuccesorFunctionSA implements SuccessorFunction{
         } while (!newBoard.changeArc(p1, p2, new Pairintbool(j, sensor)));
 
         //double v = redesHF.getHeuristicValue(newBoard);
-        String S = RedesBoard.SWAP + " " + i + " " + j + " sensor.";
+        String S;
+        if(sensor) S = RedesBoard.SWAP + " " + i + " " + j + " sensor.";
+        else S = RedesBoard.SWAP + " " + i + " " + j + " centro.";
         l.add(new Successor(S, newBoard));
         return l;
     }

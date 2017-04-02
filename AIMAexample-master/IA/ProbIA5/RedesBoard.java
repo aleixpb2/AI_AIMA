@@ -43,9 +43,9 @@ public class RedesBoard {
         }
 
         //triar quina de les tres
-        generarConexionesRandomToCenters();
+        //generarConexionesRandomToCenters();
         //generarConexionesInicial();
-        //generarConexionesRandom();
+        generarConexionesRandom(); // finalment usem aquest
 
     }
     private void generarConexionesRandomToCenters (){
