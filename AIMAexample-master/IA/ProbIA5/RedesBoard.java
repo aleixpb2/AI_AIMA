@@ -198,37 +198,28 @@ public class RedesBoard {
 
     }
     private double getDist (int x1,int x2, int y1,int y2){
-        double dist = Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
-
-        return dist;
+        return Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
     }
 
     public PairCosts computeTotalDistanceCost (){
         double cost_sum = 0;
         double distance_sum = 0;
         for (Pairintbool i : incidentConnected.keySet()){
+            int x1, y1, x2, y2;
             if (i.isSensor()){
-                int x1 = sensors[i.getID()].getCoordX();
-                int y1 = sensors[i.getID()].getCoordY();
-                ArrayList<Integer>sensorlist = incidentConnected.get(i);
-                for (int j=0; j<sensorlist.size(); ++j){
-                    int x2 = sensors[sensorlist.get(j)].getCoordX();
-                    int y2 = sensors[sensorlist.get(j)].getCoordY();
-                    cost_sum += getDist(x1,x2,y1,y2) * sensors[sensorlist.get(j)].getCurrentCap();
-                    distance_sum += Math.sqrt(getDist(x1,x2,y1,y2));
-                }
+                x1 = sensors[i.getID()].getCoordX();
+                y1 = sensors[i.getID()].getCoordY();
+            }else {
+                x1 = centros[i.getID()].getCoordX();
+                y1 = centros[i.getID()].getCoordY();
             }
-            else {
-                int x1 = centros[i.getID()].getCoordX();
-                int y1 = centros[i.getID()].getCoordY();
-                ArrayList<Integer>sensorlist = incidentConnected.get(i);
-                for (int j=0; j<sensorlist.size(); ++j){
-                    int x2 = sensors[sensorlist.get(j)].getCoordX();
-                    int y2 = sensors[sensorlist.get(j)].getCoordY();
-                    cost_sum += getDist(x1,x2,y1,y2) * sensors[sensorlist.get(j)].getCurrentCap();
-                    distance_sum += Math.sqrt(getDist(x1,x2,y1,y2)) ;
-
-                }
+            ArrayList<Integer>sensorlist = incidentConnected.get(i);
+            for (int j=0; j<sensorlist.size(); ++j){
+                x2 = sensors[sensorlist.get(j)].getCoordX();
+                y2 = sensors[sensorlist.get(j)].getCoordY();
+                double dist = getDist(x1,x2,y1,y2);
+                cost_sum += dist*dist*sensors[sensorlist.get(j)].getCurrentCap();
+                distance_sum += dist;
             }
         }
         return new PairCosts(cost_sum,distance_sum);
