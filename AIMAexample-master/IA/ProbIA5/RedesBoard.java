@@ -387,7 +387,6 @@ public class RedesBoard {
 
     public void capacityRecursive(Pairintbool p, double deltaCapacity){
         if(p.isSensor())  {
-
             double p_capacity_before = sensors[p.getID()].getCurrentCap();
             double p_capacidad = sensors[p.getID()].getCapacidad();
             //We always update the current sensor with the capacity that arrives.
@@ -398,31 +397,28 @@ public class RedesBoard {
 
             double difference = sent_now - sent_before;
             if (difference!=0) {
-                if (connexions.containsKey(p.getID())) {
+                if (connexions.containsKey(p.getID())){
+                    //////
+                    //actualitzar totalCost
+                    Pairintbool nextElement = connexions.get(p.getID());
+                    double dist = 0;
+                    if (nextElement.isSensor()) {
+                        dist = getDist(sensors[p.getID()].getCoordX(), sensors[nextElement.getID()].getCoordX(), sensors[p.getID()].getCoordY(), sensors[nextElement.getID()].getCoordY());
+                    }
+                    else {
+                        dist = getDist(sensors[p.getID()].getCoordX(), centros[nextElement.getID()].
+                                getCoordX(), sensors[p.getID()].getCoordY(), centros[nextElement.getID()].getCoordY());
+                    }
+                    totalCost = totalCost - dist*dist*p_capacity_before;
+                    totalCost = totalCost + dist*dist*sensors[p.getID()].getCurrentCap();
+                    // total cost actualitzat
+                    ////
                     capacityRecursive(connexions.get(p.getID()), difference);
                 }
             }
-                if (sensors[p.getID()].getCurrentCap()<=0){
+ /*         if (sensors[p.getID()].getCurrentCap()<=0){
                 System.out.println (p+" reacheddd negative when deleting "+deltaCapacity);
-               }
-
-            if(connexions.containsKey(p.getID())){
-                //actualitzar totalCost
-                Pairintbool nextElement = connexions.get(p.getID());
-                double dist = 0;
-                if (nextElement.isSensor()) {
-                    dist = getDist(sensors[p.getID()].getCoordX(), sensors[nextElement.getID()].getCoordX(), sensors[p.getID()].getCoordY(), sensors[nextElement.getID()].getCoordY());
-                }
-                else {
-                    dist = getDist(sensors[p.getID()].getCoordX(), centros[nextElement.getID()].
-                            getCoordX(), sensors[p.getID()].getCoordY(), centros[nextElement.getID()].getCoordY());
-                }
-                totalCost = totalCost - dist*dist*p_capacity_before;
-                totalCost = totalCost + dist*dist*sensors[p.getID()].getCurrentCap();
-                // total cost actualitzat
-
-                capacityRecursive(connexions.get(p.getID()), deltaCapacity);
-            }
+            }*/
         }
     }
 
