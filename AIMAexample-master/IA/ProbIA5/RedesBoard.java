@@ -200,7 +200,7 @@ public class RedesBoard {
     public PairCosts computeTotalDistanceCost (){
         double cost_sum = 0;
         double distance_sum = 0;
-        /*
+
         for (Pairintbool i : incidentConnected.keySet()){
             int x1, y1, x2, y2;
             if (i.isSensor()){
@@ -218,7 +218,7 @@ public class RedesBoard {
                 cost_sum += dist*dist*sensors[sensorlist.get(j)].getCurrentCap();
                 distance_sum += dist;
             }
-        }*/
+        }
         cost_sum = totalCost;
         return new PairCosts(cost_sum,distance_sum);
     }
