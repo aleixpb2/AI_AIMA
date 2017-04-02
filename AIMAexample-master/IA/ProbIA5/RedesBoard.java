@@ -43,9 +43,10 @@ public class RedesBoard {
         }
 
         //triar quina de les tres
-        //generarConexionesRandomToCenters();
+        generarConexionesRandomToCenters();
         //generarConexionesInicial();
-        generarConexionesRandom ();
+        //generarConexionesRandom();
+
     }
     private void generarConexionesRandomToCenters (){
         Random myRandom=new Random();
@@ -229,14 +230,14 @@ public class RedesBoard {
      */
     public double computeTotalTransmitted(){
         double transm = 0;
-        for (IA.ProbIA5.Pairintbool i: incidentConnected.keySet()){
-            if (!i.isSensor()){ //si es centro
+        for (int i=0; i< centros.length;++i){
+            Pairintbool current = new Pairintbool(i,false);
+            if (incidentConnected.containsKey(current)){
                 double sumCent = 0;
-                ArrayList<Integer>sensorlist = incidentConnected.get(i);
-
+                ArrayList<Integer>sensorlist = incidentConnected.get(current);
                 //System.out.println("Fors center "+i+" the capacity is");
                 for (int j=0; j<sensorlist.size(); ++j){
-                   // System.out.println (sensorlist.get(j)+" has a current cap of "+sensors[sensorlist.get(j)].getCurrentCap());
+                    // System.out.println (sensorlist.get(j)+" has a current cap of "+sensors[sensorlist.get(j)].getCurrentCap());
 
                     sumCent+= Math.min(sensors[sensorlist.get(j)].getCurrentCap(), sensors[sensorlist.get(j)].getCapacidad()*3);
                 }
