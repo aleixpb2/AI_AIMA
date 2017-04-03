@@ -45,10 +45,8 @@ public class Main {
             Search algHC = new HillClimbingSearch();
 
             // Instantiate the SearchAgent object
-            System.out.println("Before SearchAgent"); // TODO: remove
             startTime = System.nanoTime();
             agent = new SearchAgent(p, algHC);
-            System.out.println("After SearchAgent"); // TODO: remove
             finalB = (RedesBoard) algHC.getGoalState();
         }else {
             // Simmulated Annealing, 4 parameters: max iterations, iterations per temperature step
@@ -71,7 +69,8 @@ public class Main {
 
         duration = System.nanoTime() - startTime;
         sec = duration/1000000000;
-        System.out.println("Duration: " + sec +"s, which are " + sec/60.0 + " min");
+        double miliseconds = duration/1000;
+        System.out.println("Duration: "+miliseconds+" ms, which are " + sec +"s, which are " + sec/60.0 + " min");
 
         System.out.println (finalB.computeTotalDistanceCost());
         System.out.println ("Total info transmitted: " + finalB.computeTotalTransmitted());
@@ -79,16 +78,9 @@ public class Main {
 
 	    // We print the results of the search
         System.out.println("Results: actions and instrumentation");
-        printActions(agent.getActions());
+        //printActions(agent.getActions());
         printInstrumentation(agent.getInstrumentation());
 
-        /*ArrayList<Integer> list = finalB.sensorsInTree();
-        for(int i = 0; i < list.size(); ++i)
-            if(list.get(i) == 0){
-                System.out.println("ERROR, at least sensor "+ i +" is not connected!");
-                break;
-            }
-        System.out.println("All sensors are connected");*/
 
         ArrayList<Integer> listCent = finalB.centersNotUsed();
         System.out.println("Center IDs not used: " + listCent);
