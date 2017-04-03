@@ -69,18 +69,18 @@ public class Main {
 
         duration = System.nanoTime() - startTime;
         sec = duration/1000000000;
-        double miliseconds = duration/1000;
+        double miliseconds = duration/1000000;
+	    // We print the results of the search
+        System.out.println("Results: actions and instrumentation");
+        printActions(agent.getActions());
+        printInstrumentation(agent.getInstrumentation());
+
+
         System.out.println("Duration: "+miliseconds+" ms, which are " + sec +"s, which are " + sec/60.0 + " min");
 
         System.out.println (finalB.computeTotalDistanceCost());
         System.out.println ("Total info transmitted: " + finalB.computeTotalTransmitted());
-        System.out.println ("Total info of sensors: "+finalB.getMaxInfo()+  " of maximum centers cap: "+numcentros*150);
-
-	    // We print the results of the search
-        System.out.println("Results: actions and instrumentation");
-        //printActions(agent.getActions());
-        printInstrumentation(agent.getInstrumentation());
-
+        System.out.println ("Total info of sensors: "+finalB.getMaxInfo()+  " of maximum centers capacity: "+numcentros*150);
 
         ArrayList<Integer> listCent = finalB.centersNotUsed();
         System.out.println("Center IDs not used: " + listCent);
